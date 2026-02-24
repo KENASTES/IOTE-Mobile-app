@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Department of IoT and Information Engineering - KMITL</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Sarabun', sans-serif; color: #013A5D; background: #FFFFFF; }
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: #FFFFFF;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.10);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+}
+.navbar-left { display: flex; align-items: center; gap: 14px; }
+.logo-badge {
+  background: #F36F21; color: #fff;
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 17px;
+  padding: 5px 10px; border-radius: 6px; letter-spacing: 1px;
+  border: 2px solid #F36F21;
+}
+.logo-badge span { color: #fff; }
+.logo-info { font-size: 11px; color: #4a5568; line-height: 1.5; }
+.logo-info div { display: flex; align-items: center; gap: 4px; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  font-family: 'Sarabun', sans-serif; font-weight: 500; font-size: 15px;
+  color: #013A5D; text-decoration: none; transition: color .2s;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+.nav-links a:hover, .nav-links a.active { color: #F36F21; border-bottom-color: #F36F21; }
+
+/* ===== DROPDOWN SUBMENU ===== */
+.nav-links li { position: relative; }
+.nav-links li.has-dropdown > a::after {
+  content: ' ▾'; font-size: 10px; display: inline-block; transition: transform .2s;
+}
+.nav-links li.has-dropdown.open > a::after { transform: rotate(180deg); }
+.dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 8px); left: 0;
+  background: #FFFFFF;
+  border: 1px solid #e8ecf0;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(1,58,93,0.13);
+  min-width: 280px;
+  overflow: hidden;
+  z-index: 999;
+}
+.nav-links li.has-dropdown.open .dropdown { display: block; }
+.dropdown a {
+  display: block;
+  padding: 13px 20px;
+  font-size: 14px; font-family: 'Sarabun', sans-serif;
+  color: #013A5D; text-decoration: none;
+  transition: background .15s, color .15s, padding-left .15s;
+  white-space: nowrap;
+}
+.dropdown a:not(:last-child) { border-bottom: 1px solid #f0f4f8; }
+.dropdown a:hover { background: #F8FAFC; color: #F36F21; padding-left: 26px; }
+.dropdown-label {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: #0584AF; font-family: 'Kanit', sans-serif; font-weight: 600;
+  padding: 10px 20px 4px; display: block; background: #F8FAFC;
+  border-bottom: 1px solid #e8ecf0;
+}
+
+/* ===== HERO ===== */
+.hero {
+  margin-top: 64px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 64px);
+  background: #FFFFFF;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 60px 50px 60px 60px;
+}
+.hero-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700;
+  font-size: 42px; line-height: 1.15; color: #013A5D; margin-bottom: 4px;
+}
+.hero-title .orange { color: #F36F21; }
+.hero-thai {
+  font-family: 'Kanit', sans-serif; font-weight: 700;
+  font-size: 28px; color: #F36F21; line-height: 1.3; margin-bottom: 16px;
+}
+.hero-tagline { font-size: 15px; color: #4a5568; margin-bottom: 32px; }
+.hero-right {
+  background: linear-gradient(135deg, #013A5D 0%, #0584AF 60%, #013A5D 100%);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.hero-right-img {
+  width: 90%; max-width: 420px;
+  display: flex; flex-direction: column; gap: 12px; z-index: 2;
+}
+.chip-wifi {
+  background: #FFFFFF; border-radius: 50%; width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  position: absolute; right: 38%; top: 18%;
+}
+.chip-cpu {
+  background: #FFFFFF; border-radius: 50%; width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  position: absolute; right: 8%; top: 38%;
+}
+.hero-pcb-img {
+  width: 100%; border-radius: 16px;
+  background: linear-gradient(135deg,#013A5D,#013A5D);
+  height: 280px; display: flex; align-items: center; justify-content: center;
+  font-size: 90px; box-shadow: 0 8px 40px rgba(0,0,0,.4);
+}
+/* Tagline bar */
+.tagline-bar {
+  background: linear-gradient(135deg, #0584AF, #013A5D);
+  color: #fff; text-align: center;
+  padding: 28px 40px;
+  font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 22px;
+}
+.tagline-bar .sub { font-size: 14px; font-weight: 400; opacity: .85; margin-top: 4px; }
+
+/* ===== ABOUT SECTION ===== */
+.about-section {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; min-height: 420px;
+}
+.about-img {
+  background: linear-gradient(135deg, #013A5D, #0584AF);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 100px; min-height: 380px;
+  position: relative; overflow: hidden;
+}
+.about-img-inner {
+  width: 80%; text-align: center;
+}
+.about-img-label {
+  font-family: 'Kanit', sans-serif; font-weight: 700;
+  font-size: 24px; color: #F36F21; margin-top: 12px;
+}
+.about-img-sublabel { font-size: 13px; color: rgba(255,255,255,.7); }
+.about-content {
+  padding: 50px 50px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: #FFFFFF;
+}
+.about-label {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;
+  color: #013A5D; margin-bottom: 6px;
+}
+.about-sub {
+  font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 17px;
+  color: #F36F21; margin-bottom: 8px;
+}
+.about-admission {
+  font-size: 14px; color: #013A5D; margin-bottom: 4px;
+}
+.about-admission a { color: #0584AF; }
+
+/* ===== SMART SYSTEMS BANNER ===== */
+.smart-banner {
+  background: linear-gradient(135deg, #0584AF 0%, #013A5D 100%);
+  padding: 60px 40px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.smart-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+.smart-banner h2 {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 36px;
+  color: #fff; position: relative; z-index: 1;
+}
+
+/* ===== COMMUNITY SECTION ===== */
+.community-section { padding: 60px 40px; background: #FFFFFF; }
+.community-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;
+  color: #0584AF; text-align: center; margin-bottom: 40px;
+}
+.community-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 28px; max-width: 1100px; margin: 0 auto;
+}
+.comm-card {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+  min-height: 220px;
+}
+.comm-card-img {
+  background: #ddd; overflow: hidden;
+}
+.comm-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.comm-card-img-placeholder {
+  width: 100%; height: 100%; min-height: 180px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px;
+  background: linear-gradient(135deg,#e8e0d8,#c8c0b8);
+}
+.comm-card-content {
+  background: #0584AF; padding: 20px 16px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.comm-card-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 15px;
+  color: #fff; margin-bottom: 8px;
+}
+.comm-card-desc { font-size: 12px; color: rgba(255,255,255,.85); line-height: 1.5; flex: 1; }
+.comm-read-btn {
+  display: inline-block; margin-top: 12px;
+  background: #F36F21; color: #fff;
+  padding: 7px 18px; border-radius: 20px;
+  text-decoration: none; font-size: 13px;
+  font-family: 'Kanit', sans-serif; font-weight: 500;
+  width: fit-content;
+}
+/* 3-column layout: card 3 spans full */
+.comm-card-single {
+  grid-column: 2 / 3;
+}
+.community-row2 {
+  display: flex; justify-content: center; margin-top: 28px;
+}
+.community-row2 .comm-card {
+  max-width: 380px; width: 100%;
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: #013A5D; color: #fff; padding: 50px 40px 24px;
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr;
+  gap: 32px; margin-bottom: 40px;
+}
+.footer-brand .logo-badge-footer {
+  background: #F36F21; color: #fff;
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px;
+  padding: 5px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px;
+}
+.footer-brand p {
+  font-size: 12px; color: rgba(255,255,255,.65); line-height: 1.7; max-width: 220px;
+}
+.footer-col-title {
+  font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 14px;
+  color: #fff; margin-bottom: 14px;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul li a {
+  font-size: 13px; color: rgba(255,255,255,.6);
+  text-decoration: none; transition: color .2s;
+}
+.footer-col ul li a:hover { color: #F36F21; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.1); padding-top: 18px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-bottom p { font-size: 12px; color: rgba(255,255,255,.4); }
+.footer-bottom a { font-size: 12px; color: rgba(255,255,255,.4); text-decoration: none; }
+.footer-bottom a:hover { color: #F36F21; }
+
+/* ===== PAGE: MEASUREMENT MULTIMETER ===== */
+.page { display: none; }
+.page.active { display: block; }
+
+.inner-page-hero {
+  background: linear-gradient(135deg, #0584AF 0%, #013A5D 100%);
+  padding: 60px 40px; text-align: center;
+}
+.inner-page-hero h1 {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 40px; color: #fff;
+}
+.inner-page-content {
+  max-width: 1000px; margin: 0 auto; padding: 60px 40px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
+}
+.inner-page-text {}
+.inner-page-section-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px;
+  color: #0584AF; margin-bottom: 12px; margin-top: 28px;
+}
+.inner-page-section-title:first-child { margin-top: 0; }
+.inner-page-text p { font-size: 15px; line-height: 1.8; color: #013A5D; }
+.inner-page-img {
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+}
+.inner-page-img-placeholder {
+  background: #e8e4dc; height: 320px;
+  display: flex; align-items: center; justify-content: center; font-size: 80px;
+}
+
+/* ===== PAGE: ABOUT IoTE ===== */
+.about-iote-page { padding: 0; }
+.about-iote-content { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+.about-iote-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;
+  color: #0584AF; margin-bottom: 20px;
+}
+.about-iote-body { font-size: 15px; line-height: 1.9; color: #013A5D; margin-bottom: 16px; }
+
+/* Timeline */
+.timeline-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px;
+  color: #013A5D; margin: 40px 0 24px;
+}
+.timeline { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 48px; }
+.tl-card {
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+.tl-card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px;
+}
+.tl-card-header.orange { background: #F36F21; }
+.tl-card-header.teal { background: #0584AF; }
+.tl-card-header.navy { background: #013A5D; }
+.tl-year-num {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 15px; color: #fff;
+}
+.tl-year-sub { font-size: 11px; color: rgba(255,255,255,.8); }
+.tl-card-body { background: #FFFFFF; padding: 16px 20px; }
+.tl-card-name { font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 15px; color: #013A5D; margin-bottom: 8px; }
+.tl-card-desc { font-size: 13px; color: #4a5568; line-height: 1.7; }
+
+/* IoT 4 Layer */
+.arch-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;
+  color: #013A5D; text-align: center; margin-bottom: 28px;
+}
+.arch-layers { display: flex; flex-direction: column; gap: 14px; margin-bottom: 48px; }
+.arch-layer {
+  display: flex; align-items: center; gap: 20px;
+  background: #FFFFFF; border: 1.5px solid #e0e0e0; border-radius: 12px; padding: 18px 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.arch-layer.orange { border-color: #F36F21; }
+.arch-layer.teal { border-color: #0584AF; }
+.arch-layer.slate { border-color: #013A5D; }
+.arch-layer-num {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;
+  min-width: 30px;
+}
+.arch-layer.orange .arch-layer-num { color: #F36F21; }
+.arch-layer.teal .arch-layer-num { color: #0584AF; }
+.arch-layer.slate .arch-layer-num { color: #013A5D; }
+.arch-layer-icon { font-size: 28px; min-width: 36px; text-align: center; }
+.arch-layer-name { font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 16px; color: #013A5D; margin-bottom: 4px; }
+.arch-layer-desc { font-size: 13px; color: #4a5568; }
+
+/* Learning Approach */
+.learning-section { background: #F8FAFC; padding: 48px 40px; margin-bottom: 0; }
+.learning-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px;
+  color: #013A5D; text-align: center; margin-bottom: 28px;
+}
+.learning-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
+.learn-card {
+  background: #FFFFFF; border-radius: 14px; padding: 28px 22px; text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+.learn-icon { font-size: 38px; margin-bottom: 14px; }
+.learn-name {
+  font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 15px;
+  color: #013A5D; margin-bottom: 10px;
+}
+.learn-desc { font-size: 13px; color: #4a5568; line-height: 1.6; }
+
+/* Careers dark section */
+.careers-dark {
+  background: #013A5D; padding: 48px 40px;
+}
+.careers-dark-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px;
+  color: #F36F21; margin-bottom: 20px;
+}
+.careers-list {
+  list-style: none; columns: 2; gap: 12px;
+}
+.careers-list li {
+  font-size: 14px; color: rgba(255,255,255,.85); padding: 5px 0;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.careers-list li::before { content: '•'; color: #F36F21; font-size: 16px; line-height: 1; margin-top: 2px; }
+
+/* ===== PAGE: PhysIoTE ===== */
+.physio-card {
+  background: #F8FAFC; border: 2px solid #F36F21;
+  border-radius: 16px; padding: 36px; max-width: 860px; margin: 40px auto;
+}
+.physio-card-intro {
+  font-size: 15px; color: #013A5D; line-height: 1.8; margin-bottom: 28px;
+}
+.physio-card-intro strong { color: #F36F21; }
+.physio-feature {
+  text-align: center; padding: 20px 0;
+}
+.physio-feature-icon { font-size: 48px; margin-bottom: 12px; }
+.physio-feature-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 17px;
+  color: #013A5D; margin-bottom: 8px;
+}
+.physio-feature-desc { font-size: 14px; color: #4a5568; line-height: 1.6; }
+.physio-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+/* ===== PAGE: PROGRAMS ===== */
+.programs-hero-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 36px;
+  text-align: center; padding: 50px 40px 10px;
+}
+.programs-hero-title .orange { color: #F36F21; }
+.programs-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  max-width: 1000px; margin: 30px auto 60px; padding: 0 40px;
+}
+.prog-card {
+  border: 2px solid #e0e0e0; border-radius: 16px; padding: 32px;
+  text-align: center; transition: all .3s;
+}
+.prog-card:hover { border-color: #F36F21; transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+.prog-card-icon { font-size: 52px; margin-bottom: 16px; }
+.prog-card-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 15px;
+  color: #013A5D; margin-bottom: 8px; line-height: 1.4;
+}
+.prog-card-thai { font-size: 13px; color: #4a5568; margin-bottom: 18px; line-height: 1.5; }
+.prog-read-btn {
+  display: inline-block; background: #F36F21; color: #fff;
+  padding: 9px 24px; border-radius: 8px; text-decoration: none;
+  font-family: 'Kanit', sans-serif; font-weight: 500; font-size: 14px;
+}
+
+/* ===== PAGE: FACULTY ===== */
+.faculty-page-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 28px;
+  color: #fff; text-align: center; background: #013A5D; padding: 48px 40px;
+}
+.faculty-section-label {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px;
+  color: #0584AF; margin: 40px 0 20px; text-align: center;
+}
+.faculty-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 20px;
+  max-width: 1100px; margin: 0 auto; padding: 0 40px 40px;
+}
+.fac-card {
+  border-radius: 14px; overflow: hidden; box-shadow: 0 3px 14px rgba(0,0,0,.1);
+  transition: transform .3s;
+}
+.fac-card:hover { transform: translateY(-4px); }
+.fac-avatar {
+  height: 140px; display: flex; align-items: center; justify-content: center;
+  font-size: 52px; background: linear-gradient(135deg, #013A5D, #0584AF);
+}
+.fac-info { padding: 14px 16px; background: #FFFFFF; }
+.fac-name-th { font-size: 12px; color: #4a5568; margin-bottom: 3px; }
+.fac-name-en { font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 13px; color: #013A5D; margin-bottom: 8px; }
+.fac-role {
+  font-size: 11px; background: #0584AF; color: #fff;
+  padding: 3px 10px; border-radius: 20px; display: inline-block;
+}
+
+.staff-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 20px;
+  max-width: 600px; margin: 0 auto; padding: 0 40px 60px;
+}
+.staff-card {
+  border-radius: 14px; overflow: hidden; box-shadow: 0 3px 14px rgba(0,0,0,.1);
+}
+.staff-avatar {
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  font-size: 46px; background: linear-gradient(135deg, #013A5D, #013A5D);
+}
+.staff-info { padding: 14px 16px; background: #FFFFFF; text-align: center; }
+.staff-name-th { font-size: 12px; color: #4a5568; margin-bottom: 3px; }
+.staff-name-en { font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 12px; color: #013A5D; margin-bottom: 8px; }
+.staff-role { font-size: 11px; background: #013A5D; color: #fff; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+
+/* ===== PAGE: CONTACT ===== */
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  max-width: 1000px; margin: 50px auto; padding: 0 40px;
+}
+.contact-card {
+  border-radius: 16px; border: 1px solid #e0e0e0; padding: 32px;
+  box-shadow: 0 3px 14px rgba(0,0,0,.07);
+}
+.contact-card-title {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px;
+  color: #013A5D; margin-bottom: 24px;
+}
+.contact-row { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+.contact-icon-wrap {
+  width: 40px; height: 40px; border-radius: 50%; background: #F8FAFC;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+.contact-field-label { font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 14px; color: #013A5D; margin-bottom: 3px; }
+.contact-field-val { font-size: 13px; color: #4a5568; line-height: 1.6; }
+.contact-field-val a { color: #0584AF; text-decoration: none; }
+
+/* ===== INNER PAGE HEADER ===== */
+.inner-header {
+  background: linear-gradient(135deg, #0584AF, #013A5D);
+  padding: 52px 40px; text-align: center;
+}
+.inner-header h1 {
+  font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 40px; color: #fff;
+}
+
+/* page switcher helper */
+.page { min-height: 100vh; }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.hero-left > * { animation: fadeUp .6s ease both; }
+.hero-left > *:nth-child(1){animation-delay:.1s}
+.hero-left > *:nth-child(2){animation-delay:.2s}
+.hero-left > *:nth-child(3){animation-delay:.3s}
+.hero-left > *:nth-child(4){animation-delay:.4s}
+
+/* ===== IoT 4-LAYER standalone page ===== */
+.arch-standalone {
+  max-width: 860px; margin: 50px auto; padding: 0 40px;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR (shared)
+============================================================ -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <div class="logo-badge">iOTe.</div>
+    <div class="logo-info">
+      <div>&#128205; E-12 Building</div>
+      <div>&#9993; iote@kmitl.ac.th</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
+    <li class="has-dropdown">
+      <a href="#" id="nav-about">About</a>
+      <div class="dropdown">
+        <span class="dropdown-label">About</span>
+        <a href="#" onclick="showPage('about-iot'); return false;">IoT System and Information Engineering</a>
+        <a href="#" onclick="showPage('about-physio'); return false;">Dual Degree PhysIoTE (B.Eng + B.Sc)</a>
+      </div>
+    </li>
+    <li><a href="#" onclick="showPage('programs')" id="nav-programs">Programs</a></li>
+    <li class="has-dropdown">
+      <a href="#" id="nav-faculty">Faculty</a>
+      <div class="dropdown">
+        <span class="dropdown-label">Faculty</span>
+        <a href="#" onclick="showPage('faculty-iot'); return false;">Professor of IoT Systems and Information Engineering</a>
+        <a href="#" onclick="showPage('faculty-physics'); return false;">Professor of Industrial Physics</a>
+      </div>
+    </li>
+    <li><a href="#" onclick="showPage('news')" id="nav-news">News</a></li>
+    <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     PAGE: HOME
+============================================================ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left">
+      <h1 class="hero-title">Welcome to<br>Department Of<br><span class="orange">IoT</span> And <span class="orange">Information</span><br>Engineering</h1>
+      <div class="hero-thai">ภาควิชาวิศวกรรมระบบไอโอที<br>และสารสนเทศ</div>
+      <p class="hero-tagline">Innovate the Future With IoT Technology</p>
+    </div>
+    <div class="hero-right">
+      <div class="chip-cpu">&#128421;</div>
+      <div class="chip-wifi">&#128246;</div>
+      <div class="hero-right-img">
+        <div class="hero-pcb-img">&#128268;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Us strip -->
+  <div class="about-section">
+    <div class="about-img">
+      <div class="about-img-inner">
+        <div style="font-size:80px">&#127968;</div>
+        <div style="font-size:28px;color:#0584AF;margin-top:8px">SMART HOME</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="about-label">About Us</div>
+      <div class="about-sub">IoT System and Information Engineering<br>วิศวกรรมไอโอทีและสารสนเทศ</div>
+      <div class="about-admission">รับสมัครนักศึกษาประจำปี 2569</div>
+      <div class="about-admission">&gt;&gt; <a href="http://admission.reg.kmitl.ac.th/">http://admission.reg.kmitl.ac.th/</a></div>
+    </div>
+  </div>
+
+  <!-- Video placeholder -->
+  <div style="background:#013A5D;display:flex;align-items:center;justify-content:center;height:200px;">
+    <div style="text-align:center;">
+      <div style="width:70px;height:70px;background:red;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;cursor:pointer;">
+        <div style="border:solid transparent;border-width:12px 0 12px 22px;border-left-color:#fff;margin-left:4px;"></div>
+      </div>
+      <p style="color:rgba(255,255,255,.6);font-size:13px">IoT engineer job | ภาควิชา...</p>
+    </div>
+  </div>
+
+  <!-- Smart Systems Banner -->
+  <div class="smart-banner">
+    <h2>Engineering Smart Systems<br>For Real-World Impact</h2>
+  </div>
+
+  <!-- IoT Community -->
+  <div class="community-section">
+    <div class="community-title">MORE FROM THE IoT COMMUNITY</div>
+    <div class="community-grid">
+      <!-- Card 1: Measurement Multimeter -->
+      <div class="comm-card" style="cursor:pointer" onclick="showPage('multimeter')">
+        <div class="comm-card-img">
+          <div class="comm-card-img-placeholder">&#128268;</div>
+        </div>
+        <div class="comm-card-content">
+          <div>
+            <div class="comm-card-title">Measurement Multimeter</div>
+            <div class="comm-card-desc">อุปกรณ์วัดค่าที่สามารถวัดค่าได้หลากหลาย ตั้งแต่อุณหภูมิไปจนถึงปริมาณแก๊ส LPG ในรูปแบบที่ไม่เหมือนใคร</div>
+          </div>
+          <a href="#" class="comm-read-btn" onclick="showPage('multimeter');return false;">Read more</a>
+        </div>
+      </div>
+      <!-- Card 2: Safety Cap -->
+      <div class="comm-card" style="cursor:pointer" onclick="showPage('safetycap')">
+        <div class="comm-card-img">
+          <div class="comm-card-img-placeholder">&#129346;</div>
+        </div>
+        <div class="comm-card-content">
+          <div>
+            <div class="comm-card-title">Safety cap</div>
+            <div class="comm-card-desc">หมวกที่มาพร้อมกับเซนเซอร์ตรวจจับความเร่งแบบ 3 แกน และชุดหลอดไฟ LED เพื่อความปลอดภัยบนท้องถนนของคุณและคนรอบตัว</div>
+          </div>
+          <a href="#" class="comm-read-btn" onclick="showPage('safetycap');return false;">Read more</a>
+        </div>
+      </div>
+    </div>
+    <!-- Row 2: Automatic Blending centered -->
+    <div class="community-row2">
+      <div class="comm-card" style="cursor:pointer" onclick="showPage('blending')">
+        <div class="comm-card-img">
+          <div class="comm-card-img-placeholder">&#129380;</div>
+        </div>
+        <div class="comm-card-content">
+          <div>
+            <div class="comm-card-title">Automatic Blending Machine</div>
+            <div class="comm-card-desc">เมื่อเครื่องดื่มของคุณจะคงความอร่อยได้ทุกครั้ง ทุกที่ ทุกเวลา</div>
+          </div>
+          <a href="#" class="comm-read-btn" onclick="showPage('blending');return false;">Read more</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-badge-footer">iOTe.</div>
+        <p>Shaping the future of technology through innovative education and groundbreaking research.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Programs</div>
+        <ul>
+          <li><a href="#">Undergraduate</a></li>
+          <li><a href="#">Mater's Degree</a></li>
+          <li><a href="#">Doctoral Program</a></li>
+          <li><a href="#">Online Courses</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Research</div>
+        <ul>
+          <li><a href="#">Research Labs</a></li>
+          <li><a href="#">Publications</a></li>
+          <li><a href="#">Projects</a></li>
+          <li><a href="#">Partnerships</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <ul>
+          <li><a href="#">Student Portal</a></li>
+          <li><a href="#">Library</a></li>
+          <li><a href="#">Career Services</a></li>
+          <li><a href="#">Alumni Network</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">About</div>
+        <ul>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Faculty</a></li>
+          <li><a href="#">Facilities</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p>
+      <div style="display:flex;gap:16px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Teams of service</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: MEASUREMENT MULTIMETER
+============================================================ -->
+<div class="page" id="page-multimeter">
+  <div class="inner-header">
+    <h1>Measurement Multimeter</h1>
+  </div>
+  <div class="inner-page-content">
+    <div class="inner-page-text">
+      <div class="inner-page-section-title">หลักการทำงาน</div>
+      <p>ประกอบไปด้วยเซนเซอร์ 2 ตัว คือ DHT 22 Digital Temperature and Humidity ใช้สำหรับตรวจจับอุณหภูมิและความชื้น และ MQ-5 LPG Natural Gas Sensor Module สำหรับวัดปริมาณแก๊ส LPG เมื่อมีแก๊สรั่วไหล และมีอุปกรณ์ DS 3231 RTC Clock Memory เพื่อนับเวลา</p>
+      <div class="inner-page-section-title">วิธีการใช้งาน</div>
+      <p>เสียบสาย USB เพื่อจ่ายไฟแก่ Arduino จะแสดงข้อความ Measurement Multimeter กดสวิตช์ 1 ครั้ง จะแสดงเวลา เมื่อกดสวิตช์อีก 1 ครั้ง จะแสดงอุณหภูมิและความชื้น เมื่อมีอุณหภูมิน้อยกว่า 25°c LED จะติดเป็นสีเขียว เมื่ออุณหภูมิมากกว่า 25°c LED จะติดเป็นสีเหลือง และเมื่ออุณหภูมิสูงเกิน 30°c LED จะติดเป็นสีแดง และแสดงความชื้นในอากาศเป็น % เมื่อกดสวิตช์อีก 1 ครั้ง จะแสดงปริมาณแก๊ส LPG เป็น % เมื่อกดสวิตช์อีก 1 ครั้ง จะแสดงเวลาเหมือนเดิม</p>
+    </div>
+    <div class="inner-page-img">
+      <div class="inner-page-img-placeholder">&#128268;</div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: SAFETY CAP
+============================================================ -->
+<div class="page" id="page-safetycap">
+  <div class="inner-header">
+    <h1>Safety cap</h1>
+  </div>
+  <div class="inner-page-content">
+    <div class="inner-page-text">
+      <div class="inner-page-section-title">หลักการทำงาน</div>
+      <p>เซนเซอร์ตรวจจับความเร่งแบบ 3 แกน (accelerometer sensor : รุ่น ADXL345) จะถูกติดตั้งไว้ที่ด้านบนบริเวณกึ่งกลางของหมวก เมื่อหมวกมีการเอียงไปมาตัวเซนเซอร์จะวัดค่าแกน X Y และ Z แล้วนำค่าที่ได้มาคำนวณเป็นองศาและเขียนโปรแกรมผ่าน Arduino เพื่อควบคุมหลอดไฟ LED ให้มืด-สว่างตามองศาที่กำหนด</p>
+      <div class="inner-page-section-title">วิธีการใช้งาน</div>
+      <p>เมื่อในถังไม่มีขยะอยู่ ตัวแสดงผลจะแสดงเป็น 0 ตัวแสดงผลจะมีค่าเพิ่มขึ้นเรื่อยๆตามปริมาณขยะที่อยู่ภายในถัง และเมื่อมีขยะเต็ม (มีปริมาณมากพอที่ควรทิ้ง) ตัวแสดงผลจะแสดงเป็นคำว่า FULL</p>
+    </div>
+    <div class="inner-page-img">
+      <div class="inner-page-img-placeholder">&#129346;</div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: AUTOMATIC BLENDING MACHINE
+============================================================ -->
+<div class="page" id="page-blending">
+  <div class="inner-header">
+    <h1>Automatic Blending Machine</h1>
+  </div>
+  <div class="inner-page-content">
+    <div class="inner-page-text">
+      <div class="inner-page-section-title">หลักการทำงาน</div>
+      <p>ใช้ปั๊มลมในการดันน้ำขึ้นมาผสมควบคุมโดยโปรแกรมใน Arduino</p>
+      <div class="inner-page-section-title">วิธีการใช้งาน</div>
+      <p>เมื่อกดปุ่ม ปั๊มน้ำจะทำงานโดยปล่อยลมไปดันน้ำในภาชนะทั้งสองขึ้นมาในปริมาณที่ได้กำหนดสัดส่วนไว้ด้วยเวลาที่ได้ออกแบบไว้ในโปรแกรม โดยสามารถนำมาประยุกต์ใช้กับการชงเครื่องดื่ม หรือ การรดน้ำต้นไม้การทำสวนได้</p>
+    </div>
+    <div class="inner-page-img">
+      <div class="inner-page-img-placeholder">&#129380;</div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: ABOUT (About IoTE + PhysIoTE)
+============================================================ -->
+<div class="page" id="page-about-iot">
+  <div class="inner-header" style="background:linear-gradient(135deg,#013A5D,#0584AF)">
+    <h1>IoT System and Information Engineering</h1>
+  </div>
+
+  <div class="about-iote-content">
+    <div class="about-iote-title">วิศวกรรมระบบไอโอทีและสารสนเทศคืออะไร?</div>
+    <p class="about-iote-body">วิศวกรรมระบบไอโอทีและสารสนเทศ เป็นศาสตร์ที่มุ่งเน้นการออกแบบและพัฒนาระบบ Internet of Things (IoT) ซึ่งเป็นการเชื่อมต่อสื่อสารระหว่างอุปกรณ์ เครื่องจักร และสิ่งต่างๆ ผ่านเครือข่ายอินเทอร์เน็ตในยุคดิจิทัล 4.0 โดยบูรณาการความรู้ด้านสมาร์ทเซ็นเซอร์ การสื่อสารและเครือข่าย การเขียนโปรแกรมและพัฒนาซอฟต์แวร์ รวมถึงวิทยาการข้อมูลและปัญญาประดิษฐ์ เพื่อสร้างนวัตกรรมด้านระบบสารสนเทศและเทคโนโลยีอัจฉริยะ</p>
+    <p class="about-iote-body">หลักสูตรนี้สอดคล้องกับนโยบายการพัฒนาเศรษฐกิจและอุตสาหกรรมของประเทศ ตามแผนพัฒนาเศรษฐกิจและสังคมแห่งชาติฉบับที่ 13 และอุตสาหกรรมเป้าหมาย (S-Curve) เช่น อุตสาหกรรมดิจิทัลและอิเล็กทรอนิกส์อัจฉริยะ รวมถึงการพัฒนาเขตเศรษฐกิจพิเศษภาคตะวันออก (EEC)</p>
+    <p class="about-iote-body">ผู้เรียนจะได้ศึกษาและปฏิบัติทั้งด้านซอฟต์แวร์ ฮาร์ดแวร์ และระบบเครือข่าย ควบคู่กับการประยุกต์ใช้ AI และข้อมูลขนาดใหญ่เพื่อนำไปออกแบบและพัฒนานวัตกรรม ต่อยอดสู่การใช้งานจริงหรือสร้างธุรกิจและสตาร์ทอัพในอนาคต</p>
+
+    <div class="timeline-title">ความเป็นมาของหลักสูตร (Timeline)</div>
+    <div class="timeline">
+      <div class="tl-card">
+        <div class="tl-card-header orange">
+          <div>
+            <div class="tl-year-num">&#128197; 2517 (1974)</div>
+          </div>
+        </div>
+        <div class="tl-card-body">
+          <div class="tl-card-name">ภาควิชาเทคนิคอุตสาหกรรม</div>
+          <div class="tl-card-desc">เริ่มก่อตั้งภาควิชาเทคนิคอุตสาหกรรม ภายใต้คณะวิศวกรรมศาสตร์ โดยเปิดรับนักศึกษาในหลักสูตรอุตสาหกรรมศาสตรบัณฑิต มุ่งเน้นการผลิตบัณฑิตที่มีความรู้และทักษะด้านเทคนิคและอุตสาหกรรม นับเป็นรากฐานสำคัญของการพัฒนาการเรียนการสอนด้านวิศวกรรมและเทคโนโลยีของสถาบันในระยะแรก</div>
+        </div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-card-header teal">
+          <div>
+            <div class="tl-year-num">&#128197; 2544 (2001)</div>
+          </div>
+        </div>
+        <div class="tl-card-body">
+          <div class="tl-card-name">ภาควิชาเทคนิคอุตสาหกรรม</div>
+          <div class="tl-card-desc">เมื่อวันที่ 6 พฤศจิกายน พ.ศ. 2544 ได้รับการประกาศในราชกิจจานุเบกษาให้เปลี่ยนชื่อเป็น ภาควิชาวิศวกรรมสารสนเทศ อย่างเป็นทางการ พร้อมทั้งจัดทำและปรับปรุงหลักสูตรสาขาวิศวกรรมสารสนเทศ เพื่อผลิตบัณฑิตที่มีพื้นฐานด้านคอมพิวเตอร์ โทรคมนาคม อิเล็กทรอนิกส์และการจัดการข้อมูล</div>
+        </div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-card-header navy">
+          <div>
+            <div class="tl-year-num">&#128197; 2553 (2010)</div>
+          </div>
+        </div>
+        <div class="tl-card-body">
+          <div class="tl-card-name">การปรับโครงสร้างองค์กรและหลักสูตร</div>
+          <div class="tl-card-desc">คณะวิศวกรรมศาสตร์ได้ปรับโครงสร้างองค์กรใหม่ โดยให้คณาจารย์จากภาควิชาวิศวกรรมสารสนเทศทำงานร่วมกับภาควิชาวิศวกรรมคอมพิวเตอร์ภายใต้ส่วนวิชาการเดียวกัน คือ ภาควิชาวิศวกรรมคอมพิวเตอร์</div>
+        </div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-card-header" style="background:#0584AF">
+          <div>
+            <div class="tl-year-num">&#128197; 2553 (2010)</div>
+          </div>
+        </div>
+        <div class="tl-card-body">
+          <div class="tl-card-name">หลักสูตรวิศวกรรมสารสนเทศ</div>
+          <div class="tl-card-desc">หลักสูตรได้รับการพัฒนาให้สอดคล้องกับนโยบายยุทธศาสตร์การจัดการศึกษา และแนวคิด "Disruptive Curriculum" มุ่งเน้นความทันสมัยและการบูรณาการองค์ความรู้ด้านระบบไอโอที ระบบอัจฉริยะ และเทคโนโลยีสารสนเทศ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IoT Architecture -->
+    <div class="arch-title">IoT 4-Layer Architecture</div>
+    <div class="arch-layers">
+      <div class="arch-layer orange">
+        <div class="arch-layer-num">1</div>
+        <div class="arch-layer-icon">&#128241;</div>
+        <div>
+          <div class="arch-layer-name">Application Layer</div>
+          <div class="arch-layer-desc">User interfaces, dashboards, mobile apps, and business logic that interact with end users</div>
+        </div>
+      </div>
+      <div class="arch-layer teal">
+        <div class="arch-layer-num">2</div>
+        <div class="arch-layer-icon">&#128452;</div>
+        <div>
+          <div class="arch-layer-name">Data Processing Layer</div>
+          <div class="arch-layer-desc">Cloud computing, data analytics, AI/ML algorithms, and decision-making systems</div>
+        </div>
+      </div>
+      <div class="arch-layer slate">
+        <div class="arch-layer-num">3</div>
+        <div class="arch-layer-icon">&#128279;</div>
+        <div>
+          <div class="arch-layer-name">Network Layer</div>
+          <div class="arch-layer-desc">Communication protocols, gateways, routers, and data transmission infrastructure</div>
+        </div>
+      </div>
+      <div class="arch-layer" style="border-color:#F36F21">
+        <div class="arch-layer-num" style="color:#F36F21">4</div>
+        <div class="arch-layer-icon">&#128161;</div>
+        <div>
+          <div class="arch-layer-name">Device Layer</div>
+          <div class="arch-layer-desc">Sensors, actuators, microcontrollers, and physical IoT devices collecting data</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Learning Approach -->
+  <div class="learning-section">
+    <div class="learning-title">Our Learning Approach</div>
+    <div class="learning-grid">
+      <div class="learn-card">
+        <div class="learn-icon">&#128640;</div>
+        <div class="learn-name">Project-Based Learning</div>
+        <div class="learn-desc">Hands-on experience through real-world projects that solve actual problems</div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-icon">&#128300;</div>
+        <div class="learn-name">Hands-on Laboratory</div>
+        <div class="learn-desc">State-of-the-art labs with modern IoT equipment and development tools</div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-icon">&#128161;</div>
+        <div class="learn-name">Active & Problem-Based Learning</div>
+        <div class="learn-desc">Interactive sessions focusing on critical thinking and practical problem-solving</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Careers -->
+  <div class="careers-dark">
+    <div style="max-width:860px;margin:0 auto;">
+      <div class="careers-dark-title">&#127891; อาชีพที่ประกอบได้หลังจบการศึกษา</div>
+      <ul class="careers-list">
+        <li>วิศวกรระบบไอโอที (IoT Engineer)</li>
+        <li>วิศวกรระบบสารสนเทศ (Information System Engineer)</li>
+        <li>วิศวกรระบบสมองกลฝังตัว (Embedded System Engineer)</li>
+        <li>วิศวกรซอฟต์แวร์ระบบสมองกลฝังตัว (Embedded Software Engineer)</li>
+        <li>นักพัฒนาแอพพลิเคชัน (Application Developer)</li>
+        <li>โปรแกรมเมอร์ (Programmer)</li>
+        <li>วิศวกรซอฟต์แวร์ (Software Engineer)</li>
+        <li>นักพัฒนาส่วนหน้า (Front End Developer)</li>
+        <li>นักพัฒนาส่วนเบื้องหลัง (Back End Developer)</li>
+        <li>นักพัฒนาฟูลสแต็ก (Full Stack Developer)</li>
+        <li>วิศวกรระบบคลาว์ (Cloud Engineer)</li>
+        <li>วิศวกรระบบเครือข่าย (Network Engineer)</li>
+        <li>นักวิทยาการข้อมูล (Data Scientist)</li>
+        <li>วิศวกรข้อมูล (Data Engineer)</li>
+        <li>ผู้ดูแลระบบ (System Administrator)</li>
+        <li>นักวิจัย นักวิชาการ เจ้าของธุรกิจส่วนตัว และอาชีพอื่นๆ ที่เกี่ยวข้องกับด้านคอมพิวเตอร์หรือไอที</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PhysIoTE Section -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-badge-footer">iOTe.</div>
+        <p>Shaping the future of technology through innovative education and groundbreaking research.</p>
+      </div>
+      <div class="footer-col"><div class="footer-col-title">Programs</div><ul><li><a href="#">Undergraduate</a></li><li><a href="#">Mater's Degree</a></li><li><a href="#">Doctoral Program</a></li><li><a href="#">Online Courses</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Research</div><ul><li><a href="#">Research Labs</a></li><li><a href="#">Publications</a></li><li><a href="#">Projects</a></li><li><a href="#">Partnerships</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Resources</div><ul><li><a href="#">Student Portal</a></li><li><a href="#">Library</a></li><li><a href="#">Career Services</a></li><li><a href="#">Alumni Network</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">About</div><ul><li><a href="#">Our Story</a></li><li><a href="#">Faculty</a></li><li><a href="#">Facilities</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><div><a href="#">Privacy Policy</a>&nbsp;&nbsp;<a href="#">Teams of service</a></div></div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: ABOUT PHYSIOTE (Dual Degree)
+============================================================ -->
+<div class="page" id="page-about-physio">
+  <div class="inner-header" style="background:linear-gradient(135deg,#013A5D,#0584AF)">
+    <h1>Dual Degree PhysIoTE</h1>
+  </div>
+
+  <div style="background:#FFFFFF;padding:60px 40px;">
+    <div style="max-width:860px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Kanit',sans-serif;font-weight:700;font-size:30px;color:#013A5D;">About PhysIoTE</div>
+      </div>
+      <div class="physio-card">
+        <div class="physio-card-intro">
+          <strong>ครั้งแรกของประเทศไทย โครงการหลักสูตรปริญญาตรีสองปริญญา (Dual Degree)</strong> ระหว่างคณะวิศวกรรมศาสตร์และคณะวิทยาศาสตร์สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง <strong>วศ.บ. วิศวกรรมระบบไอโอทีและสารสนเทศ และ วท.บ. ฟิสิกส์อุตสาหกรรม</strong>
+        </div>
+        <p style="font-size:14px;color:#013A5D;line-height:1.8;margin-bottom:24px;">ในโลกยุค Disruption ได้เปลี่ยนแปลงทุกสิ่งไปอย่างรวดเร็ว การรู้เพียงศาสตร์ใดศาสตร์หนึ่งจึงอาจไม่เพียงพอกับการต่อสู้ในยุคแห่งการเปลี่ยนแปลงนี้แล้ว โดยเฉพาะอย่างยิ่งทักษะทางดิจิทัลและเทคโนโลยีที่จำเป็นต่อโลกอันไร้พรมแดน จึงเป็นที่มาของหลักสูตร "PhysIoT" ที่ตอบสนองกับการเปลี่ยนแปลงในยุค Disruption นี้ให้บัณฑิตมีความรู้ที่รอบด้านทั้งทางด้านวิทยาศาสตร์และวิศวกรรมศาสตร์</p>
+        <div class="physio-features">
+          <div class="physio-feature">
+            <div class="physio-feature-icon">&#127891;</div>
+            <div class="physio-feature-title">เรียน 4 ปี ได้ 2 ปริญญา</div>
+            <div class="physio-feature-desc">วศ.บ. วิศวกรรมระบบไอโอทีและสารสนเทศ + วท.บ. ฟิสิกส์อุตสาหกรรม</div>
+          </div>
+          <div class="physio-feature">
+            <div class="physio-feature-icon">&#129309;</div>
+            <div class="physio-feature-title">ทลายกำแพงระหว่างคณะ</div>
+            <div class="physio-feature-desc">ศึกษาและปฏิบัติด้านอิเล็กทรอนิกส์อัจฉริยะและสมาร์ทเซ็นเซอร์</div>
+          </div>
+          <div class="physio-feature">
+            <div class="physio-feature-icon">&#127942;</div>
+            <div class="physio-feature-title">จบแล้วฮอตสุด ไม่มีตกยุค</div>
+            <div class="physio-feature-desc">อาชีพด้านไอทีเป็นสายงานที่มีความหลากหลายมากในยุคดิจิทัลไทยแลนด์ 4.0</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:40px;">
+        <div style="font-family:'Kanit',sans-serif;font-weight:700;font-size:18px;color:#013A5D;margin-bottom:16px;">&#127891; อาชีพที่ประกอบได้หลังจบการศึกษา</div>
+        <ul style="list-style:disc;padding-left:24px;columns:2;gap:16px;">
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">นักวิจัยในภาครัฐและเอกชน</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">ผู้ประกอบการทางธุรกิจเทคโนโลยี วิศวกรไอโอที (IoT Engineer)</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">วิศวกรซอฟต์แวร์ (Software Engineer)</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">วิศวกรระบบสมองกลฝังตัว (Embedded Engineer)</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">นักพัฒนาแอพพลิเคชัน (Application Developer)</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">นักวิทยาการข้อมูล (Data Scientist)</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">วิศวกรควบคุมคุณภาพ</li>
+          <li style="font-size:14px;color:#013A5D;margin-bottom:8px;">วิศวกรฝ่ายวิจัยและพัฒนา</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="logo-badge-footer">iOTe.</div><p>Shaping the future of technology through innovative education and groundbreaking research.</p></div>
+      <div class="footer-col"><div class="footer-col-title">Programs</div><ul><li><a href="#">Undergraduate</a></li><li><a href="#">Mater's Degree</a></li><li><a href="#">Doctoral Program</a></li><li><a href="#">Online Courses</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Research</div><ul><li><a href="#">Research Labs</a></li><li><a href="#">Publications</a></li><li><a href="#">Projects</a></li><li><a href="#">Partnerships</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Resources</div><ul><li><a href="#">Student Portal</a></li><li><a href="#">Library</a></li><li><a href="#">Career Services</a></li><li><a href="#">Alumni Network</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">About</div><ul><li><a href="#">Our Story</a></li><li><a href="#">Faculty</a></li><li><a href="#">Facilities</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><div><a href="#">Privacy Policy</a>&nbsp;&nbsp;<a href="#">Teams of service</a></div></div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: PROGRAMS
+============================================================ -->
+<div class="page" id="page-programs">
+  <div style="padding-top:0;">
+    <div class="programs-hero-title">Master the Technologies<br><span class="orange">Shaping Our World</span></div>
+    <div class="programs-grid">
+      <div class="prog-card">
+        <div class="prog-card-icon">&#127760;</div>
+        <div class="prog-card-title">BACHELOR OF ENGINEERING (IOT SYSTEM AND INFORMATION)</div>
+        <div class="prog-card-thai">ปริญญาตรีวิศวกรรมศาสตรบัณฑิต (วิศวกรรมไอโอทีและสารสนเทศ)</div>
+        <a href="#" class="prog-read-btn">Read more</a>
+      </div>
+      <div class="prog-card">
+        <div class="prog-card-icon">&#9883;</div>
+        <div class="prog-card-title">DUAL DEGREE (B.ENG. IOT SYSTEM AND INFORMATION + B.SC. INDUSTRIAL PHYSICS)</div>
+        <div class="prog-card-thai">วท.บ. ฟิสิกส์อุตสาหกรรม และ วศ.บ. วิศวกรรมระบบไอโอทีและสารสนเทศ (หลักสูตรสองปริญญา)</div>
+        <a href="#" class="prog-read-btn">Read more</a>
+      </div>
+      <div class="prog-card">
+        <div class="prog-card-icon">&#127981;</div>
+        <div class="prog-card-title">BACHELOR OF ENGINEERING (COMPUTER AND IOT) (CONTINUING PROGRAM)</div>
+        <div class="prog-card-thai">ปริญญาตรีวิศวกรรมศาสตรบัณฑิต (คอมพิวเตอร์และไอโอที) หลักสูตรต่อเนื่อง</div>
+        <a href="#" class="prog-read-btn">Read more</a>
+      </div>
+      <div class="prog-card">
+        <div class="prog-card-icon">&#127891;</div>
+        <div class="prog-card-title">MASTER OF ENGINEERING AND DOCTOR OF PHILOSOPHY (AIOT AND INFORMATION)</div>
+        <div class="prog-card-thai">ปริญญาโท วิศวกรรมศาสตรมหาบัณฑิต (เอไอโอทีและสารสนเทศ) และ ปริญญาเอก ปรัชญาดุษฎีบัณฑิต (เอไอโอทีและสารสนเทศ)</div>
+        <a href="#" class="prog-read-btn">Read more</a>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="logo-badge-footer">iOTe.</div><p>Shaping the future of technology through innovative education and groundbreaking research.</p></div>
+      <div class="footer-col"><div class="footer-col-title">Programs</div><ul><li><a href="#">Undergraduate</a></li><li><a href="#">Mater's Degree</a></li><li><a href="#">Doctoral Program</a></li><li><a href="#">Online Courses</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Research</div><ul><li><a href="#">Research Labs</a></li><li><a href="#">Publications</a></li><li><a href="#">Projects</a></li><li><a href="#">Partnerships</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Resources</div><ul><li><a href="#">Student Portal</a></li><li><a href="#">Library</a></li><li><a href="#">Career Services</a></li><li><a href="#">Alumni Network</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">About</div><ul><li><a href="#">Our Story</a></li><li><a href="#">Faculty</a></li><li><a href="#">Facilities</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><div><a href="#">Privacy Policy</a>&nbsp;&nbsp;<a href="#">Teams of service</a></div></div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: FACULTY
+============================================================ -->
+<div class="page" id="page-faculty-iot">
+  <div class="faculty-page-title">Professor of IoT Systems and Information Engineering</div>
+
+  <div class="faculty-section-label">คณาจารย์ภาควิชาวิศวกรรมไอโอทีและสารสนเทศ</div>
+  <div class="faculty-grid">
+    <div class="fac-card"><div class="fac-avatar">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.พิกุลแก้ว ตั้งติสานนท์</div><div class="fac-name-en">Asst.Prof.Dr.Pikulkaew Tangtisanon</div><span class="fac-role">หัวหน้าภาควิชา</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.บุณยชนะ ภู่ระหงษ์</div><div class="fac-name-en">Assoc.Prof.Dr.Boonchana Purahong</div><span class="fac-role">ประธานหลักสูตรวิศวกรรมระบบไอโอทีและสารสนเทศ</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ศ.ดร. อภิรัฐ ศิริธราธิวัตร</div><div class="fac-name-en">Prof. Dr. Apirat Siritaratiwat</div><span class="fac-role">รองหัวหน้าภาควิชา (ฝ่ายวิจัยและนวัตกรรม)</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.วันวิสา ชัชวงษ์</div><div class="fac-name-en">Asst.Prof.Dr.Vanvisa Chutchavong</div><span class="fac-role">รองหัวหน้าภาควิชา (ฝ่ายการเงิน)</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.นัชนัยน์ รุ่งเหมือนฟ้า</div><div class="fac-name-en">Asst.Prof.Dr.Natchanai Roongmuanpha</div><span class="fac-role">รองหัวหน้าภาควิชา (ฝ่ายต่างประเทศและกิจกรรมคณะ)</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ดร.สุวิไล พุ่มโพธิ</div><div class="fac-name-en">Dr.Suwilai Phumpho</div><span class="fac-role">รองหัวหน้าภาควิชา (ฝ่ายกิจการภายนอก)</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#F36F21,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.นิจจารีย์ สัตยารักษ์</div><div class="fac-name-en">Asst.Prof.Nitjaree Satayarak</div><span class="fac-role">รองหัวหน้าภาควิชา (ฝ่ายกิจการนักศึกษา)</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ธนวิชญ์ อนุวงศ์พินิจ</div><div class="fac-name-en">Asst.Prof.Dr.Thanavit Anuwongpinit</div><span class="fac-role">รองหัวหน้าภาควิชา (ฝ่ายวิชาการ)</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.เกล็ดดาว สัตย์เจริญ</div><div class="fac-name-en">Asst.Prof.Dr.Kleddao Satcharoen</div><span class="fac-role">อาจารย์ประจำภาควิชา</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.อรรถพล ป้อมสถิตย์</div><div class="fac-name-en">Asst.Prof.Dr.Auttapon Pomsathit</div><span class="fac-role">อาจารย์ประจำภาควิชา</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.พนารัตน์ เชิญถนอมวงศ์</div><div class="fac-name-en">Asst.Prof.Dr.Panarat Cherntanomwong</div><span class="fac-role">อาจารย์ประจำภาควิชา</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#F36F21,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.สรพงษ์ วชิรรัตนพรกุล</div><div class="fac-name-en">Asst.Prof.Sorapong Wachirarattanapornkul</div><span class="fac-role">อาจารย์ประจำภาควิชา</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.อรรถสิทธิ หล่าสกุล</div><div class="fac-name-en">Assoc.Prof.Dr.Attasit Lasakul</div><span class="fac-role">อาจารย์พิเศษ</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ไพศาล สิทธิโยภาสกุล</div><div class="fac-name-en">Asst.Prof.Paisan Sithiyopasakul</div><span class="fac-role">อาจารย์พิเศษ</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128116;</div><div class="fac-info"><div class="fac-name-th">ศ.ดร.ปิติเขต สู้รักษา</div><div class="fac-name-en">Prof.Dr.Pitikhate Sooraksa</div><span class="fac-role" style="background:#013A5D">อาจารย์</span></div></div>
+    <div class="fac-card" style="opacity:0;pointer-events:none;"></div>
+  </div>
+
+  <div class="faculty-section-label">บุคลากรภาควิชาวิศวกรรมไอโอทีและสารสนเทศ</div>
+  <div class="staff-grid">
+    <div class="staff-card"><div class="staff-avatar">&#128104;</div><div class="staff-info"><div class="staff-name-th">นายธนาตย์ จอมใจเอกชน</div><span class="staff-role">เจ้าหน้าที่วิศวกร</span></div></div>
+    <div class="staff-card"><div class="staff-avatar">&#128104;</div><div class="staff-info"><div class="staff-name-th">นายธีรสิทธิ โท้ทอง</div><span class="staff-role">เจ้าหน้าที่วิศวกร</span></div></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="logo-badge-footer">iOTe.</div><p>Shaping the future of technology through innovative education and groundbreaking research.</p></div>
+      <div class="footer-col"><div class="footer-col-title">Programs</div><ul><li><a href="#">Undergraduate</a></li><li><a href="#">Mater's Degree</a></li><li><a href="#">Doctoral Program</a></li><li><a href="#">Online Courses</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Research</div><ul><li><a href="#">Research Labs</a></li><li><a href="#">Publications</a></li><li><a href="#">Projects</a></li><li><a href="#">Partnerships</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Resources</div><ul><li><a href="#">Student Portal</a></li><li><a href="#">Library</a></li><li><a href="#">Career Services</a></li><li><a href="#">Alumni Network</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">About</div><ul><li><a href="#">Our Story</a></li><li><a href="#">Faculty</a></li><li><a href="#">Facilities</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><div><a href="#">Privacy Policy</a>&nbsp;&nbsp;<a href="#">Teams of service</a></div></div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: FACULTY — INDUSTRIAL PHYSICS
+============================================================ -->
+<div class="page" id="page-faculty-physics">
+  <div class="faculty-page-title" style="background:linear-gradient(135deg,#0584AF,#013A5D);">Professor of Industrial Physics</div>
+
+  <div class="faculty-section-label">คณาจารย์ภาควิชาฟิสิกส์อุตสาหกรรม</div>
+  <div class="faculty-grid">
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.ภัทรียา ดำรงศักดิ์</div><div class="fac-name-en">Assoc.Prof.Dr.Pattareeya Damrongsak</div><span class="fac-role" style="background:#0584AF">หัวหน้าภาควิชาฟิสิกส์</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.สาหร่าย เล็กชะอุ่ม</div><div class="fac-name-en">Assoc.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.รชันก สมพรเสน่ห์</div><div class="fac-name-en">Assoc.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ดร.พิชชานันท์ ธีเศรษฐ์โศภน</div><div class="fac-name-en">Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.สุรศักดิ์ พิพัฒน์ศาสตร์</div><div class="fac-name-en">Asst.Prof.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">อ.สุรชาติ กมลดิลก</div><div class="fac-name-en">Lect.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.กฤษกร โล้เจริญรัตน์</div><div class="fac-name-en">Assoc.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ดร.ชนิพรรธน์ รัตนศิรวิทย์</div><div class="fac-name-en">Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ณัฏกฤษ สมดอก</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ดร.ยงยุทธ แก้วจำรัส</div><div class="fac-name-en">Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ลัญจกร ตันนุกิจ</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.กีรยุทธ์ ศรีนวลจันทร์</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ภาณุพล โขลนกระโทก</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ณัฐพร พรหมรส</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ประธาน บุรณศิริ</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.เมตยา กิติวรรณ</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.ศ.ทิพวรรณ คล้ายบุญมี</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128105;</div><div class="fac-info"><div class="fac-name-th">รศ.ดร.อาภาภรณ์ สกุลการะเวก</div><div class="fac-name-en">Assoc.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128105;</div><div class="fac-info"><div class="fac-name-th">ผศ.ธนภรณ์ ลีลาวัฒนานนท์</div><div class="fac-name-en">Asst.Prof.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">อ.ธรรมรัตน์ แต่งตั้ง</div><div class="fac-name-en">Lect.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ศ.ดร.เชรษฐา รัตนพันธ์</div><div class="fac-name-en">Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ผศ.ดร.พิศาล ศรีราช</div><div class="fac-name-en">Asst.Prof.Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#0584AF,#013A5D)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ดร.วิฑูรย์ ยินดีสุข</div><div class="fac-name-en">Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+    <div class="fac-card"><div class="fac-avatar" style="background:linear-gradient(135deg,#013A5D,#0584AF)">&#128104;</div><div class="fac-info"><div class="fac-name-th">ดร.เฉลิมพล รุจรดาวงศ์</div><div class="fac-name-en">Dr.</div><span class="fac-role" style="background:#0584AF">อาจารย์ผู้รับผิดชอบหลักสูตร</span></div></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="logo-badge-footer">iOTe.</div><p>Shaping the future of technology through innovative education and groundbreaking research.</p></div>
+      <div class="footer-col"><div class="footer-col-title">Programs</div><ul><li><a href="#">Undergraduate</a></li><li><a href="#">Mater's Degree</a></li><li><a href="#">Doctoral Program</a></li><li><a href="#">Online Courses</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Research</div><ul><li><a href="#">Research Labs</a></li><li><a href="#">Publications</a></li><li><a href="#">Projects</a></li><li><a href="#">Partnerships</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Resources</div><ul><li><a href="#">Student Portal</a></li><li><a href="#">Library</a></li><li><a href="#">Career Services</a></li><li><a href="#">Alumni Network</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">About</div><ul><li><a href="#">Our Story</a></li><li><a href="#">Faculty</a></li><li><a href="#">Facilities</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><div><a href="#">Privacy Policy</a>&nbsp;&nbsp;<a href="#">Teams of service</a></div></div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     PAGE: NEWS (placeholder – not in PDF)
+============================================================ -->
+<div class="page" id="page-news">
+  <div class="inner-header"><h1>News</h1></div>
+  <div style="text-align:center;padding:80px 40px;color:#4a5568;font-size:16px;">ยังไม่มีข่าวในขณะนี้</div>
+  <footer class="site-footer"><div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><a href="#">Privacy Policy</a></div></footer>
+</div>
+
+<!-- ============================================================
+     PAGE: CONTACT
+============================================================ -->
+<div class="page" id="page-contact">
+  <div class="inner-header" style="background:linear-gradient(135deg,#013A5D,#0584AF)">
+    <h1>Contact</h1>
+  </div>
+
+  <div class="contact-grid">
+    <!-- IoT System -->
+    <div class="contact-card">
+      <div class="contact-card-title">IoT System &amp; Information</div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128205;</div>
+        <div>
+          <div class="contact-field-label">Address</div>
+          <div class="contact-field-val">คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง ชั้น 12 อาคารเรียนรวม 12 ชั้น เลขที่ 1 ซอยฉลองกรุง 1 แขงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128222;</div>
+        <div>
+          <div class="contact-field-label">Phone</div>
+          <div class="contact-field-val">02 329 8000 ext.5129<br>02 239 8301 ext.235</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#9993;</div>
+        <div>
+          <div class="contact-field-label">Email</div>
+          <div class="contact-field-val"><a href="mailto:iote@kmitl.ac.th">iote@kmitl.ac.th</a><br><a href="mailto:pikulkaew.ta@kmitl.ac.th">pikulkaew.ta@kmitl.ac.th</a></div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128172;</div>
+        <div>
+          <div class="contact-field-label">Line</div>
+          <div class="contact-field-val"><a href="#">@iotekmitl</a></div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128216;</div>
+        <div>
+          <div class="contact-field-label">Facebook</div>
+          <div class="contact-field-val"><a href="https://www.facebook.com/IOTE.KMITL">www.facebook.com/IOTE.KMITL</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Industrial Physics -->
+    <div class="contact-card">
+      <div class="contact-card-title">Industrial Physics</div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128205;</div>
+        <div>
+          <div class="contact-field-label">Address</div>
+          <div class="contact-field-val">คณะวิทยาศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง ตึกจุฬาภรณ์วลัยลักษณ์ 1 ชั้น 3 เลขที่ 1 ซอยฉลองกรุง 1 แขงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128222;</div>
+        <div>
+          <div class="contact-field-label">Phone</div>
+          <div class="contact-field-val">02-329-8000 ext.6214</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#9993;</div>
+        <div>
+          <div class="contact-field-label">Email</div>
+          <div class="contact-field-val"><a href="mailto:science@kmitl.ac.th">@SCIENCE@kmitl.ac.th</a></div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128172;</div>
+        <div>
+          <div class="contact-field-label">Line</div>
+          <div class="contact-field-val"><a href="#">@842xiplr</a></div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">&#128216;</div>
+        <div>
+          <div class="contact-field-label">Facebook</div>
+          <div class="contact-field-val">
+            <a href="https://www.facebook.com/physiotkmitl">https://www.facebook.com/physiotkmitl</a><br>
+            <a href="https://facebook.com/SciKmitl">https://facebook.com/SciKmitl</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="logo-badge-footer">iOTe.</div><p>Shaping the future of technology through innovative education and groundbreaking research.</p></div>
+      <div class="footer-col"><div class="footer-col-title">Programs</div><ul><li><a href="#">Undergraduate</a></li><li><a href="#">Mater's Degree</a></li><li><a href="#">Doctoral Program</a></li><li><a href="#">Online Courses</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Research</div><ul><li><a href="#">Research Labs</a></li><li><a href="#">Publications</a></li><li><a href="#">Projects</a></li><li><a href="#">Partnerships</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">Resources</div><ul><li><a href="#">Student Portal</a></li><li><a href="#">Library</a></li><li><a href="#">Career Services</a></li><li><a href="#">Alumni Network</a></li></ul></div>
+      <div class="footer-col"><div class="footer-col-title">About</div><ul><li><a href="#">Our Story</a></li><li><a href="#">Faculty</a></li><li><a href="#">Facilities</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>@2026 King Mongkut's Institute of Technology Ladkrabang. All rights reserved</p><div><a href="#">Privacy Policy</a>&nbsp;&nbsp;<a href="#">Teams of service</a></div></div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     JS: Page switching
+============================================================ -->
+<script>
+const pageMap = {
+  home: 'page-home',
+  'about-iot': 'page-about-iot',
+  'about-physio': 'page-about-physio',
+  programs: 'page-programs',
+  'faculty-iot': 'page-faculty-iot',
+  'faculty-physics': 'page-faculty-physics',
+  news: 'page-news',
+  contact: 'page-contact',
+  multimeter: 'page-multimeter',
+  safetycap: 'page-safetycap',
+  blending: 'page-blending',
+};
+
+function showPage(key) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Show target
+  const target = document.getElementById(pageMap[key] || 'page-home');
+  if (target) target.classList.add('active');
+  // Update nav active state
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + key);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0,0);
+  return false;
+}
+
+// ===== DROPDOWN: click to toggle, close on outside click =====
+document.querySelectorAll('.nav-links li.has-dropdown > a').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const li = this.closest('li');
+    const isOpen = li.classList.contains('open');
+    // Close all dropdowns first
+    document.querySelectorAll('.nav-links li.has-dropdown').forEach(function(el) {
+      el.classList.remove('open');
+    });
+    // Toggle current
+    if (!isOpen) li.classList.add('open');
+  });
+});
+
+// Close dropdown when clicking anywhere outside
+document.addEventListener('click', function() {
+  document.querySelectorAll('.nav-links li.has-dropdown').forEach(function(el) {
+    el.classList.remove('open');
+  });
+});
+
+// Intercept regular nav links (non-dropdown)
+document.querySelectorAll('.nav-links a:not(.has-dropdown > a)').forEach(a => {
+  a.addEventListener('click', function(e) {
+    // Close any open dropdown
+    document.querySelectorAll('.nav-links li.has-dropdown').forEach(function(el) {
+      el.classList.remove('open');
+    });
+  });
+});
+</script>
+</body>
+</html>
