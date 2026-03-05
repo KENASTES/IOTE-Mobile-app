@@ -1,0 +1,924 @@
+/* ===================================================
+   IoTE NEWS - RESPONSIVE STYLESHEET
+   Color Palette:
+     Navy:   #013A5D (rgba(1,58,93,1))
+     Orange: #F36F21 (rgba(243,111,33,1))
+     BG:     #F8FAFC
+     White:  #FFFFFF
+   =================================================== */
+
+/* ---------- RESET & BASE ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1a1a2e;
+  background: #F8FAFC;
+  overflow-x: hidden;
+  padding-top: 69px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 60px 0;
+}
+
+/* ===== NAVBAR (ก็อปปี้จาก Iote_Main_Web) ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: #FFFFFF;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.10);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+}
+.navbar-left { display: flex; align-items: center; gap: 20px; }
+.navbar-left img { height: 80px; width: auto; }
+
+.logo-info { font-size: 11px; color: #4a5568; line-height: 1.5; }
+.logo-info div { display: flex; align-items: center; gap: 4px; }
+.logo-info a { color: #4a5568; text-decoration: none; }
+
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav-links a {
+  font-family: 'Sarabun', sans-serif; font-weight: 500; font-size: 15px;
+  color: #013A5D; text-decoration: none; transition: color .2s;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+.nav-links a:hover, .nav-links a.active { color: #F36F21; border-bottom-color: #F36F21; }
+
+.nav-links li { position: relative; list-style: none; }
+.nav-links li.has-dropdown > a::after {
+  content: ' ▾'; font-size: 10px; display: inline-block; transition: transform .2s;
+}
+.nav-links li.has-dropdown:hover > a::after { transform: rotate(180deg); }
+
+/* Dropdown เมนู */
+.dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 8px); left: 0;
+  background: #FFFFFF;
+  border: 1px solid #e8ecf0;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(1,58,93,0.13);
+  min-width: 280px;
+  overflow: hidden;
+  z-index: 999;
+}
+.nav-links li.has-dropdown:hover .dropdown { display: block; }
+.dropdown a {
+  display: block;
+  padding: 13px 20px;
+  font-size: 14px; font-family: 'Sarabun', sans-serif;
+  color: #013A5D; text-decoration: none;
+  transition: background .15s, color .15s, padding-left .15s;
+  white-space: nowrap;
+}
+.dropdown a:not(:last-child) { border-bottom: 1px solid #f0f4f8; }
+.dropdown a:hover { background: #F8FAFC; color: #F36F21; padding-left: 26px; border-bottom: none; }
+.dropdown-label {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: #0584AF; font-family: 'Kanit', sans-serif; font-weight: 600;
+  padding: 10px 20px 4px; display: block; background: #F8FAFC;
+  border-bottom: 1px solid #e8ecf0;
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; align-items: center;
+  gap: 5px; width: 40px; height: 40px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+  border-radius: 8px; transition: background .2s;
+}
+.hamburger:hover { background: #F8FAFC; }
+.hamburger span {
+  display: block; width: 24px; height: 2.5px;
+  background: #013A5D; border-radius: 4px;
+  transition: all .3s ease;
+  transform-origin: center;
+}
+
+/* ---------- SECTION HEADER ---------- */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.section-icon {
+  width: 42px;
+  height: 42px;
+  color: #F36F21;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #013A5D;
+  letter-spacing: -0.5px;
+}
+
+/* ---------- NEWS FLASH-CARD SLIDER ---------- */
+.news-section {
+  background: #F8FAFC;
+  padding-top: 40px;
+}
+
+/* stacked news list */
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ensure cards occupy full width outside slider context */
+.news-list .news-card {
+  width: 100%;
+  min-width: auto;
+}
+
+.news-slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  padding: 0 68px;
+}
+
+.news-slider-wrapper .slider-btn-prev {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+}
+
+.news-slider-wrapper .slider-btn-next {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.news-slider-viewport {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.news-slider-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.news-card {
+  min-width: 100%;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.news-card-inner {
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  border: 3px solid #F36F21;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(1, 58, 93, 0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.news-card-inner:hover {
+  box-shadow: 0 8px 32px rgba(243, 111, 33, 0.15);
+  transform: translateY(-2px);
+}
+
+.news-card-thumb {
+  width: 200px;
+  min-height: 180px;
+  flex-shrink: 0;
+  padding: 20px;
+}
+
+.thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  background: linear-gradient(135deg, #d1d5db, #9ca3af);
+  border-radius: 20px;
+  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.news-card-content {
+  flex: 1;
+  padding: 28px 28px 28px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.news-tag {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+.tag-announcement {
+  background: #F36F21;
+}
+
+.tag-event {
+  background: #F36F21;
+}
+
+.tag-achievement {
+  background: #F36F21;
+}
+
+.tag-partnership {
+  background: #F36F21;
+}
+
+.tag-seminar {
+  background: #F36F21;
+}
+
+.news-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.news-time svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.news-excerpt {
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Slider Buttons */
+.slider-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid #013A5D;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(1, 58, 93, 0.1);
+}
+
+.slider-btn:hover {
+  background: #013A5D;
+  transform: scale(1.08);
+  box-shadow: 0 4px 20px rgba(1, 58, 93, 0.25);
+}
+
+.slider-btn:hover svg {
+  stroke: #fff;
+}
+
+.slider-btn:active {
+  transform: scale(0.95);
+}
+
+.slider-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: #013A5D;
+  transition: stroke 0.3s ease;
+}
+
+/* Slider Dots */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.slider-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #d1d5db;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.slider-dot.active {
+  background: #F36F21;
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(243, 111, 33, 0.4);
+}
+
+.slider-dot:hover:not(.active) {
+  background: #9ca3af;
+  transform: scale(1.1);
+}
+
+/* View All Button */
+.view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 48px auto 0;
+  padding: 16px 40px;
+  border: 3px solid #013A5D;
+  border-radius: 50px;
+  font-size: 22px;
+  font-weight: 300;
+  color: #013A5D;
+  background: #fff;
+  transition: all 0.3s ease;
+  text-align: center;
+  /* center the button */
+  display: flex;
+  justify-content: center;
+  max-width: 320px;
+}
+
+.view-all-btn svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.view-all-btn:hover {
+  background: #013A5D;
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(1, 58, 93, 0.25);
+  transform: translateY(-2px);
+}
+
+.view-all-btn:hover svg {
+  stroke: #fff;
+  transform: translateX(4px);
+}
+
+/* ---------- TCAS SECTION ---------- */
+.tcas-section {
+  background: #fff;
+}
+
+.tcas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.tcas-card {
+  background: #fff;
+  border: 3px solid #F36F21;
+  border-radius: 24px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 260px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tcas-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #F36F21, #ff8f4c);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tcas-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(243, 111, 33, 0.15);
+}
+
+.tcas-card:hover::before {
+  opacity: 1;
+}
+
+.tcas-active {
+  border-color: #F36F21;
+}
+
+.tcas-card-top {
+  flex: 1;
+}
+
+.tcas-round {
+  font-size: 28px;
+  font-weight: 600;
+  color: #013A5D;
+  margin-bottom: 8px;
+}
+
+.tcas-type {
+  font-size: 24px;
+  font-weight: 600;
+  color: #013A5D;
+}
+
+.tcas-card-bottom {
+  margin-top: 20px;
+}
+
+.tcas-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #013A5D;
+  font-weight: 300;
+}
+
+.tcas-date svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #013A5D;
+}
+
+.tcas-apply-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  background: #F36F21;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 32px;
+  transition: all 0.3s ease;
+}
+
+.tcas-apply-btn:hover {
+  background: #e05f15;
+  box-shadow: 0 4px 16px rgba(243, 111, 33, 0.4);
+  transform: translateY(-1px);
+}
+
+.tcas-coming-soon {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  background: #F8FAFC;
+  color: #013A5D;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 32px;
+}
+
+/* ---------- CAMPS SECTION ---------- */
+.camps-section {
+  background: #F8FAFC;
+  padding-bottom: 80px;
+}
+
+.camps-title {
+  font-size: 42px;
+  font-weight: 800;
+  color: #013A5D;
+  text-align: center;
+  margin-bottom: 48px;
+  letter-spacing: -0.5px;
+}
+
+.camps-slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  padding: 0 68px;
+}
+
+.camps-slider-wrapper .slider-btn-prev {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+}
+
+.camps-slider-wrapper .slider-btn-next {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.camps-slider-viewport {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.camps-slider-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.camp-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 10px;
+}
+
+.camp-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(242, 101, 34, 0.2);
+    z-index: 10;
+}
+
+.camp-card-image {
+  border: 3px solid #F36F21;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.camp-placeholder {
+  width: 100%;
+  padding-top: 65%;
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  border-radius: 20px;
+  margin: 8px;
+  width: calc(100% - 16px);
+}
+
+.camp-card-body {
+  padding: 16px 8px;
+}
+
+.camp-card-body h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #013A5D;
+  margin-bottom: 6px;
+}
+
+.camp-card-body p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  background: #013A5D;
+  padding: 30px 0 32px;
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+}
+
+.footer-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-tagline {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  font-weight: 400;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.footer-copyright {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ===================================================
+   RESPONSIVE BREAKPOINTS
+   =================================================== */
+
+/* ---------- TABLET (max-width: 1024px) ---------- */
+@media (max-width: 1024px) {
+  .navbar-info {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #fff;
+    flex-direction: column;
+    padding: 100px 32px 40px;
+    gap: 4px;
+    box-shadow: -4px 0 32px rgba(0, 0, 0, 0.15);
+    transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 105;
+  }
+
+  .nav-links.open {
+    right: 0;
+  }
+
+  .nav-link {
+    font-size: 18px;
+    padding: 12px 16px;
+    width: 100%;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+
+  .tcas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .camps-title {
+    font-size: 32px;
+  }
+
+  .view-all-btn {
+    font-size: 18px;
+    padding: 14px 32px;
+  }
+}
+
+/* ---------- MOBILE (max-width: 768px) ---------- */
+@media (max-width: 768px) {
+  .section {
+    padding: 40px 0;
+  }
+
+  .navbar-inner {
+    height: 64px;
+  }
+
+  .logo-img {
+    height: 90px;
+  }
+
+  .section-header {
+    margin-bottom: 28px;
+  }
+
+  .section-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .section-title {
+    font-size: 22px;
+  }
+
+  /* News cards on mobile - stack thumb & content */
+  .news-card-inner {
+    flex-direction: column;
+  }
+
+  .news-card-thumb {
+    width: 100%;
+    min-height: 140px;
+    padding: 16px;
+  }
+
+  .news-card-content {
+    padding: 20px;
+  }
+
+  .news-tag {
+    font-size: 14px;
+    padding: 6px 16px;
+  }
+
+  /* Slider buttons smaller */
+  .slider-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .slider-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .slider-dots {
+    margin-top: 20px;
+  }
+
+  .slider-dot {
+    width: 11px;
+    height: 11px;
+  }
+
+  /* TCAS grid 1 column */
+  .tcas-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .tcas-card {
+    min-height: auto;
+    padding: 24px 20px;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .tcas-card-top {
+    flex: 1;
+  }
+
+  .tcas-card-bottom {
+    margin-top: 0;
+    text-align: right;
+  }
+
+  .tcas-round {
+    font-size: 22px;
+  }
+
+  .tcas-type {
+    font-size: 18px;
+  }
+
+  .tcas-apply-btn,
+  .tcas-coming-soon {
+    font-size: 15px;
+    padding: 10px 20px;
+    width: auto;
+    display: inline-block;
+  }
+
+  .camps-title {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+
+  .view-all-btn {
+    font-size: 16px;
+    padding: 12px 28px;
+    max-width: 260px;
+  }
+
+  .footer-logo {
+    height: 180px;
+  }
+
+  .footer-tagline {
+    font-size: 14px;
+  }
+
+  .footer-copyright {
+    font-size: 12px;
+  }
+}
+
+/* ---------- SMALL MOBILE (max-width: 480px) ---------- */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .section {
+    padding: 32px 0;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .news-slider-wrapper {
+    gap: 8px;
+  }
+
+  .slider-btn {
+    width: 34px;
+    height: 34px;
+    border-width: 2px;
+  }
+
+  .slider-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .news-card-content {
+    padding: 16px;
+  }
+
+  .news-tag {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .news-time {
+    font-size: 12px;
+  }
+
+  .news-excerpt {
+    font-size: 13px;
+  }
+
+  .camps-title {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .camp-card-body h3 {
+    font-size: 15px;
+  }
+
+  .camp-card-body p {
+    font-size: 12px;
+  }
+
+  .view-all-btn {
+    font-size: 14px;
+    padding: 10px 24px;
+    max-width: 220px;
+  }
+}

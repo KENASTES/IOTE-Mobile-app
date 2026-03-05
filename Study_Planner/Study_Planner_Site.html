@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMITL IoT Engineering Curriculum Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #F8FAFC;
+            --white: #FFFFFF;
+            --orange: #F36F21;
+            --sea-blue: #0584AF;
+            --navy: #013A5D;
+
+            --color-major: var(--navy);
+            --color-math: var(--sea-blue);
+            --color-gened: var(--orange);
+            --color-free: var(--orange);
+
+            --glow-pre: #F36F21;
+            --glow-post: #0584AF;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { font-family: 'Kanit', sans-serif; background-color: var(--bg-main); color: var(--navy); margin: 0; padding: 40px 20px; }
+        .container { max-width: 1600px; margin: 0 auto; background: var(--white); border-radius: 30px; padding: 40px 50px; box-shadow: 0 20px 40px rgba(1, 58, 93, 0.08); border: 1px solid var(--bg-main); }
+        
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 32px; margin: 0 0 10px 0; font-weight: 700; transition: color 0.3s; color: var(--navy); line-height: 1.3;}
+        .header .subtitle { font-size: 18px; color: var(--sea-blue); font-weight: 500; margin-bottom: 20px;}
+        
+        .tab-group { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; background: var(--bg-main); padding: 8px; border-radius: 50px; width: fit-content; margin-left: auto; margin-right: auto; }
+        .btn { padding: 12px 30px; border-radius: 50px; border: none; background: transparent; cursor: pointer; font-family: 'Kanit'; font-weight: 600; font-size: 16px; color: var(--sea-blue); transition: all 0.3s; }
+        .btn.active-iot { background: var(--navy); color: var(--white); box-shadow: 0 4px 15px rgba(1, 58, 93, 0.3); }
+        .btn.active-phys { background: var(--sea-blue); color: var(--white); box-shadow: 0 4px 15px rgba(5, 132, 175, 0.3); }
+        .btn.active-cont { background: var(--orange); color: var(--white); box-shadow: 0 4px 15px rgba(243, 111, 33, 0.3); }
+
+        .legends-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 40px; }
+        .category-legend, .interactive-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; background: var(--white); padding: 12px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(1, 58, 93, 0.05); border: 1px solid var(--bg-main); }
+        .legend-title { color: var(--navy); font-weight: 700; font-size: 15px; margin-right: 5px; }
+        .c-legend-item, .i-legend-item { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--navy); }
+        .color-box { width: 14px; height: 14px; border-radius: 4px; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; }
+
+        .view-wrapper { position: relative; width: 100%; min-height: 800px; }
+        .view { position: absolute; top: 0; left: 0; width: 100%; visibility: hidden; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; z-index: 1;}
+        .view.active { position: relative; visibility: visible; opacity: 1; transform: translateY(0); z-index: 2;}
+
+        .curriculum-board { display: flex; gap: 25px; align-items: stretch; width: 100%; padding-bottom: 20px; }
+        .year-group { display: flex; gap: 25px; flex: 1; }
+        .year-divider { width: 2px; height: auto; background: repeating-linear-gradient(to bottom, var(--bg-main) 0, var(--bg-main) 10px, transparent 10px, transparent 20px); margin: 0 5px; }
+        
+        .semester-col { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 140px;}
+        .sem-title { text-align: center; color: var(--navy); font-weight: 700; font-size: 18px; margin-bottom: 10px; }
+
+        .course-box { border-radius: 8px; padding: 12px 8px; color: var(--white); text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; justify-content: center; min-height: 65px; box-shadow: 0 4px 6px rgba(1, 58, 93, 0.15); border: 4px solid transparent; position: relative; }
+        .c-name { font-size: 13px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; word-wrap: break-word; }
+        .c-code { font-size: 11px; opacity: 0.9; font-weight: 400; }
+
+        .bg-eng { background-color: var(--navy); } 
+        .bg-sci { background-color: var(--sea-blue); } 
+        .bg-gen { background-color: var(--orange); } 
+
+        .board-hovered .course-box { background-color: var(--bg-main) !important; border: 2px dashed #cbd5e1 !important; color: #94a3b8 !important; box-shadow: none !important; opacity: 0.4; transform: scale(0.98); }
+        .board-hovered .course-box.highlight-active { opacity: 1; filter: grayscale(0%); transform: scale(1.05); background-color: var(--navy) !important; color: var(--white) !important; box-shadow: 0 10px 20px rgba(1, 58, 93, 0.4) !important; z-index: 10; border-color: var(--white) !important; }
+        .board-hovered .course-box.highlight-pre { opacity: 1; filter: grayscale(0%); transform: scale(1.05); background-color: var(--white) !important; color: var(--orange) !important; border: 4px solid var(--orange) !important; box-shadow: 0 0 25px rgba(243, 111, 33, 0.4) !important; z-index: 10; }
+        .board-hovered .course-box.highlight-pre .c-code { color: var(--navy) !important; font-weight: 600;}
+        .board-hovered .course-box.highlight-post { opacity: 1; filter: grayscale(0%); transform: scale(1.05); background-color: var(--white) !important; color: var(--sea-blue) !important; border: 4px solid var(--sea-blue) !important; box-shadow: 0 0 25px rgba(5, 132, 175, 0.4) !important; z-index: 10; }
+        .board-hovered .course-box.highlight-post .c-code { color: var(--navy) !important; font-weight: 600;}
+        
+        .has-pre-icon { position: absolute; top: 4px; right: 6px; font-size: 10px; opacity: 0.9; color: var(--white); }
+        .board-hovered .course-box.highlight-pre .has-pre-icon { color: var(--orange) !important; }
+        .board-hovered .course-box.highlight-post .has-pre-icon { color: var(--sea-blue) !important; }
+
+        .plan-section { display: flex; flex-direction: column; gap: 15px; flex: 2; min-width: 280px; }
+        .plan-row { display: flex; gap: 20px; border: 2px solid var(--bg-main); border-radius: 16px; padding: 25px 15px 15px 15px; position: relative; }
+        .plan-label { position: absolute; top: -12px; right: 20px; background: var(--white); padding: 0 10px; font-size: 14px; font-weight: 700; color: var(--navy); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1, 58, 93, 0.8); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: all 0.3s ease; z-index: 1000; padding: 20px; }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+        .modal-box { background: var(--white); border-radius: 24px; padding: 40px; width: 100%; max-width: 750px; max-height: 85vh; overflow-y: auto; transform: translateY(20px); transition: all 0.3s ease; position: relative; border-top: 8px solid var(--navy); box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .modal-overlay.active .modal-box { transform: translateY(0); }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-main); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--sea-blue); font-weight: bold; transition: all 0.2s; display: flex; justify-content: center; align-items: center;}
+        .modal-close:hover { background: var(--orange); color: var(--white); transform: rotate(90deg); }
+        
+        .m-category { font-size: 14px; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; color: var(--sea-blue); }
+        .m-title { font-size: 28px; font-weight: 700; color: var(--navy); margin: 0 0 10px 0; line-height: 1.2; }
+        .m-code-credit { font-size: 16px; color: var(--sea-blue); font-weight: 500; margin-bottom: 20px; background: var(--bg-main); display: inline-block; padding: 6px 18px; border-radius: 50px;}
+        
+        .prereq-alert { background: var(--white); border: 2px solid var(--orange); color: var(--orange); padding: 12px 20px; border-radius: 12px; font-size: 15px; font-weight: 600; display: none; align-items: center; gap: 10px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(243, 111, 33, 0.1); }
+        .prereq-alert.active { display: flex; }
+        
+        .m-desc-box { background: var(--bg-main); padding: 25px 30px; border-radius: 16px; border-left: 6px solid var(--sea-blue); }
+        .m-desc { font-size: 15px; color: var(--navy); line-height: 1.7; }
+        .m-desc strong { color: var(--sea-blue); font-size: 16px; display: block; margin-top: 20px; margin-bottom: 6px;}
+        .m-desc strong:first-child { margin-top: 0; }
+        .m-desc ul { margin-top: 5px; padding-left: 20px; margin-bottom: 15px;}
+        .m-desc li { margin-bottom: 8px; }
+
+        @media (max-width: 1250px) {
+            .curriculum-board { flex-direction: column; align-items: stretch; gap: 30px; }
+            .year-divider { width: 100%; height: 2px; margin: 5px 0; background: repeating-linear-gradient(to right, var(--bg-main) 0, var(--bg-main) 10px, transparent 10px, transparent 20px); }
+            .year-group { width: 100%; }
+            .plan-section { width: 100%; }
+            .view-wrapper { min-height: auto; }
+            .view.active { position: static; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .container { padding: 30px 20px; border-radius: 20px; }
+            .header h1 { font-size: 24px; }
+            .header .subtitle { font-size: 14px; }
+            .tab-group { flex-direction: column; width: 100%; border-radius: 16px; padding: 10px; }
+            .btn { width: 100%; text-align: center; }
+            .legends-container { align-items: stretch; }
+            .category-legend, .interactive-legend { flex-direction: column; gap: 12px; border-radius: 16px; align-items: flex-start; padding: 20px;}
+            .year-group { flex-direction: column; gap: 25px; }
+            .plan-row { flex-direction: column; padding-top: 35px; }
+            .plan-label { left: 15px; right: auto; top: -12px; }
+            .semester-col { width: 100%; }
+            .modal-box { padding: 30px 20px; }
+            .m-title { font-size: 22px; }
+            .m-desc-box { padding: 20px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1 id="main-title">วศ.บ.วิศวกรรมระบบไอโอทีและสารสนเทศ</h1>
+        <div id="main-subtitle" class="subtitle">(ฉบับปรับปรุง พ.ศ. 2569) คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</div>
+    </div>
+
+    <div class="tab-group">
+        <button id="btn-iot" class="btn active-iot" onclick="switchTab('iot')">วศ.บ. ระบบไอโอที (ปกติ)</button>
+        <button id="btn-phys" class="btn" onclick="switchTab('phys')">PhysIoT (สองปริญญา)</button>
+        <button id="btn-cont" class="btn" onclick="switchTab('cont')">วศ.บ. ไอโอที (ต่อเนื่อง)</button>
+    </div>
+
+    <div class="legends-container">
+        <div class="category-legend">
+            <span class="legend-title">FACULTY & CATEGORY:</span>
+            <div class="c-legend-item"><div class="color-box bg-eng"></div> Engineering</div>
+            <div class="c-legend-item"><div class="color-box bg-sci"></div> Science / Math</div>
+            <div class="c-legend-item"><div class="color-box bg-gen"></div> Gen-Ed / Free Elective</div>
+        </div>
+
+        <div class="interactive-legend">
+            <span class="legend-title">💡 INTERACTIVE MAP:</span>
+            <div class="i-legend-item">
+                <div class="dot" style="background-color: var(--white); border: 3px solid var(--orange);"></div> Prerequisite
+            </div>
+            <div class="i-legend-item">
+                <div class="dot" style="background-color: var(--white); border: 3px solid var(--sea-blue);"></div> Unlocks
+            </div>
+        </div>
+    </div>
+
+    <div class="view-wrapper">
+        <div id="view-iot" class="view active">
+            <div class="curriculum-board" id="board-iot">
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 1/1</div>
+                        <div class="course-box bg-eng" data-code="01006030"><div class="c-name">Calculus 1</div><div class="c-code">01006030 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006020"><div class="c-name">General Physics 1</div><div class="c-code">01006020 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006021"><div class="c-name">Gen Phys Lab 1</div><div class="c-code">01006021 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236604"><div class="c-name">Circuit & Electronics</div><div class="c-code">01236604 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006012"><div class="c-name">Computer Programming</div><div class="c-code">01006012 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236611"><div class="c-name">Introduction to IoT</div><div class="c-code">01236611 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236605"><div class="c-name">Cir & Elec Lab</div><div class="c-code">01236605 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236610"><div class="c-name">3D Drawing</div><div class="c-code">01236610 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90641008"><div class="c-name">Intro to English</div><div class="c-code">90641008 (0)</div></div>
+                        <div class="course-box bg-gen" data-code="90642036"><div class="c-name">Prep Activities</div><div class="c-code">90642036 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90641007"><div class="c-name">Digital Citizen</div><div class="c-code">90641007 (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 1/2</div>
+                        <div class="course-box bg-eng" data-code="01006031"><div class="has-pre-icon">🔗</div><div class="c-name">Calculus 2</div><div class="c-code">01006031 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006022"><div class="has-pre-icon">🔗</div><div class="c-name">General Physics 2</div><div class="c-code">01006022 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006023"><div class="has-pre-icon">🔗</div><div class="c-name">Gen Phys Lab 2</div><div class="c-code">01006023 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236251"><div class="c-name">Discrete Mathematics</div><div class="c-code">01236251 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236613"><div class="has-pre-icon">🔗</div><div class="c-name">Object-Oriented Prog</div><div class="c-code">01236613 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236601"><div class="c-name">Probability & Statistics</div><div class="c-code">01236601 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236619"><div class="c-name">Interactive Design</div><div class="c-code">01236619 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90642118"><div class="c-name">App Soft for Business</div><div class="c-code">90642118 (2)</div></div>
+                        <div class="course-box bg-gen" data-code="90641004"><div class="c-name">Team Project 1</div><div class="c-code">90641004 (1)</div></div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 2/1</div>
+                        <div class="course-box bg-eng" data-code="01236600"><div class="c-name">Diff Eq & Linear Algebra</div><div class="c-code">01236600 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236615"><div class="c-name">Principles of Comms</div><div class="c-code">01236615 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236603"><div class="c-name">Digital Systems</div><div class="c-code">01236603 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236609"><div class="c-name">Digital Systems Lab</div><div class="c-code">01236609 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236614"><div class="has-pre-icon">🔗</div><div class="c-name">Data Struct & Algorithms</div><div class="c-code">01236614 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236626"><div class="c-name">System Analysis & Design</div><div class="c-code">01236626 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641009"><div class="c-name">English Inter Comms 1</div><div class="c-code">90641009 (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 2/2</div>
+                        <div class="course-box bg-eng" data-code="01236256"><div class="c-name">Cloud Computing Lab 1</div><div class="c-code">01236256 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236616"><div class="c-name">Data Communications</div><div class="c-code">01236616 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236618"><div class="c-name">Mobile App Development</div><div class="c-code">01236618 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236627"><div class="c-name">Computer Org & OS</div><div class="c-code">01236627 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236630"><div class="has-pre-icon">🔗</div><div class="c-name">Database Systems</div><div class="c-code">01236630 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236617"><div class="c-name">Sensors & Cyber-Phys</div><div class="c-code">01236617 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236628"><div class="c-name">Cloud Computing Lab 2</div><div class="c-code">01236628 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236622"><div class="c-name">Cyber Security</div><div class="c-code">01236622 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641005"><div class="c-name">Team Project 2</div><div class="c-code">90641005 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90641010"><div class="c-name">English Inter Comms 2</div><div class="c-code">90641010 (3)</div></div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 3/1</div>
+                        <div class="course-box bg-eng" data-code="01236629"><div class="c-name">Wireless Networks IoT</div><div class="c-code">01236629 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236621"><div class="c-name">AI of Things (AIoT)</div><div class="c-code">01236621 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236625"><div class="c-name">Seminar</div><div class="c-code">01236625 (0)</div></div>
+                        <div class="course-box bg-eng" data-code="01236623"><div class="c-name">IoT Laboratory 1</div><div class="c-code">01236623 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236612"><div class="has-pre-icon">🔗</div><div class="c-name">Micro & Embedded Sys</div><div class="c-code">01236612 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90644xxx"><div class="c-name">Gen-Ed (Language)</div><div class="c-code">90644xxx (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 3/2</div>
+                        <div class="course-box bg-eng" data-code="01236620"><div class="c-name">PLC and Industrial IoT</div><div class="c-code">01236620 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0123xxxx_1"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0123xxxx_2"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236267"><div class="c-name">IoT Laboratory 2</div><div class="c-code">01236267 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90xxxxxx_1"><div class="c-name">General Education 1</div><div class="c-code">90xxxxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90xxxxxx_2"><div class="c-name">General Education 2</div><div class="c-code">90xxxxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641006"><div class="c-name">Team Project 3</div><div class="c-code">90641006 (1)</div></div>
+                        
+                        <div style="margin-top: 15px; text-align: center; border-top: 1px dashed var(--sea-blue); padding-top: 15px;">
+                            <div class="sem-title" style="font-size: 14px;">SEM 3/3</div>
+                            <div class="course-box bg-eng" data-code="01006004"><div class="c-name">Industrial Training</div><div class="c-code">01006004 (0)</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="plan-section">
+                    <div class="plan-row">
+                        <div class="plan-label">PLAN 1 : PROJECT</div>
+                        <div class="semester-col">
+                            <div class="sem-title">SEM 4/1</div>
+                            <div class="course-box bg-eng" data-code="01236606"><div class="c-name">IoT Project 1</div><div class="c-code">01236606 (3)</div></div>
+                            <div class="course-box bg-eng" data-code="0123xxxx_3"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-eng" data-code="0123xxxx_4"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_1"><div class="c-name">Free Elective 1</div><div class="c-code">xxxxxxx (3)</div></div>
+                        </div>
+                        <div class="semester-col">
+                            <div class="sem-title">SEM 4/2</div>
+                            <div class="course-box bg-eng" data-code="01236607"><div class="has-pre-icon">🔗</div><div class="c-name">IoT Project 2</div><div class="c-code">01236607 (3)</div></div>
+                            <div class="course-box bg-eng" data-code="0123xxxx_5"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-eng" data-code="01236608"><div class="c-name">Capstone Project</div><div class="c-code">01236608 (1)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_2"><div class="c-name">Free Elective 2</div><div class="c-code">xxxxxxx (3)</div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="plan-row" style="margin-top: 15px;">
+                        <div class="plan-label">PLAN 2 : CO-OP / ABROAD</div>
+                        <div class="semester-col" style="flex: 2;">
+                            <div class="course-box bg-eng" style="min-height: 80px;" data-code="01006029"><div class="c-name">Co-operative Education / Study Abroad</div><div class="c-code">01006029 (6)</div></div>
+                        </div>
+                        <div class="semester-col">
+                            <div class="course-box bg-eng" data-code="0123xxxx_6"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_3"><div class="c-name">Free Elective</div><div class="c-code">xxxxxxx (3)</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-phys" class="view">
+            <div class="curriculum-board" id="board-phys">
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 1/1</div>
+                        <div class="course-box bg-sci" data-code="05016201"><div class="c-name">Calculus 1</div><div class="c-code">05016201 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366001"><div class="c-name">Physics 1</div><div class="c-code">05366001 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366002"><div class="c-name">Physics Lab 1</div><div class="c-code">05366002 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05366043"><div class="c-name">Engineering Drawing WS</div><div class="c-code">05366043 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05206500"><div class="c-name">Biology</div><div class="c-code">05206500 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05206501"><div class="c-name">Biology Lab</div><div class="c-code">05206501 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90644007"><div class="c-name">Foundation English 1</div><div class="c-code">90644007 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90642118_P"><div class="c-name">App Soft for Business</div><div class="c-code">90642118 (2)</div></div>
+                        <div class="course-box bg-gen" data-code="90641001"><div class="c-name">Charm School</div><div class="c-code">90641001 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236255"><div class="c-name">Introduction to IoT</div><div class="c-code">01236255 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006012_P"><div class="c-name">Computer Programming</div><div class="c-code">01006012 (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 1/2</div>
+                        <div class="course-box bg-sci" data-code="05016202"><div class="has-pre-icon">🔗</div><div class="c-name">Calculus 2</div><div class="c-code">05016202 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366003"><div class="has-pre-icon">🔗</div><div class="c-name">Physics 2</div><div class="c-code">05366003 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366004"><div class="has-pre-icon">🔗</div><div class="c-name">Physics Lab 2</div><div class="c-code">05366004 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236254"><div class="c-name">Circuit & Electronics</div><div class="c-code">01236254 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236249"><div class="c-name">Digital Systems</div><div class="c-code">01236249 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641007_P"><div class="c-name">Digital Citizen</div><div class="c-code">90641007 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90644008"><div class="c-name">Foundation English 2</div><div class="c-code">90644008 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90642036_P"><div class="c-name">Prep Activities</div><div class="c-code">90642036 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90641004_P"><div class="c-name">Team Project 1</div><div class="c-code">90641004 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236257"><div class="has-pre-icon">🔗</div><div class="c-name">OOP & Data Structures</div><div class="c-code">01236257 (3)</div></div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 2/1</div>
+                        <div class="course-box bg-sci" data-code="05366020"><div class="has-pre-icon">🔗</div><div class="c-name">Mathematical Physics</div><div class="c-code">05366020 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366023"><div class="has-pre-icon">🔗</div><div class="c-name">Electronic Circuits</div><div class="c-code">05366023 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366024"><div class="c-name">Electronics Lab</div><div class="c-code">05366024 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05366032"><div class="c-name">Electromagnetic Field</div><div class="c-code">05366032 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366036"><div class="c-name">Micro & Embedded Sys</div><div class="c-code">05366036 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366034"><div class="has-pre-icon">🔗</div><div class="c-name">Sensors & Transducers</div><div class="c-code">05366034 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366039"><div class="c-name">Int Physics Lab 1</div><div class="c-code">05366039 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236258"><div class="c-name">Principles of Comms</div><div class="c-code">01236258 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90xxxxxx_P1"><div class="c-name">General Education</div><div class="c-code">90xxxxxx (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 2/2</div>
+                        <div class="course-box bg-sci" data-code="05366027"><div class="c-name">Digital Elec Lab</div><div class="c-code">05366027 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05366028"><div class="c-name">Mechanics</div><div class="c-code">05366028 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366030"><div class="c-name">Modern Physics</div><div class="c-code">05366030 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366033"><div class="c-name">Waves & Optics</div><div class="c-code">05366033 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366040"><div class="c-name">Int Physics Lab 2</div><div class="c-code">05366040 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05366038"><div class="c-name">Industrial Statistics</div><div class="c-code">05366038 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236259"><div class="c-name">IoT Network & Data</div><div class="c-code">01236259 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236262"><div class="c-name">Interactive Design</div><div class="c-code">01236262 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236261"><div class="c-name">Mobile App Dev</div><div class="c-code">01236261 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236265"><div class="c-name">Cyber Security</div><div class="c-code">01236265 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641005_P"><div class="c-name">Team Project 2</div><div class="c-code">90641005 (1)</div></div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 3/1</div>
+                        <div class="course-box bg-sci" data-code="05106030"><div class="c-name">Chemistry</div><div class="c-code">05106030 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05106042"><div class="c-name">Chemistry Lab</div><div class="c-code">05106042 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05366031"><div class="c-name">Thermal & Stat Phys</div><div class="c-code">05366031 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366035"><div class="c-name">Physics Semiconductors</div><div class="c-code">05366035 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366080"><div class="c-name">Seminar</div><div class="c-code">05366080 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05366041"><div class="c-name">Ind Physics Lab 1</div><div class="c-code">05366041 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90xxxxxx_P2"><div class="c-name">General Education</div><div class="c-code">90xxxxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01236264"><div class="c-name">AIoT</div><div class="c-code">01236264 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0123xxxx_P1"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0123xxxx_P2"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 3/2</div>
+                        <div class="course-box bg-sci" data-code="05366029"><div class="has-pre-icon">🔗</div><div class="c-name">Quantum Mechanics</div><div class="c-code">05366029 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366037"><div class="c-name">Measurement & Inst</div><div class="c-code">05366037 (3)</div></div>
+                        <div class="course-box bg-sci" data-code="05366042"><div class="c-name">Ind Physics Lab 2</div><div class="c-code">05366042 (1)</div></div>
+                        <div class="course-box bg-sci" data-code="05xxxxxx"><div class="c-name">Physics Elective</div><div class="c-code">05xxxxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90xxxxxx_P3"><div class="c-name">Gen-Ed Language</div><div class="c-code">90xxxxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641006_P"><div class="c-name">Team Project 3</div><div class="c-code">90641006 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01236263"><div class="c-name">Industrial IoT</div><div class="c-code">01236263 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0123xxxx_P3"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                        
+                        <div style="margin-top: 15px; text-align: center; border-top: 1px dashed var(--sea-blue); padding-top: 15px;">
+                            <div class="sem-title" style="font-size: 14px;">SEM 3/3</div>
+                            <div class="course-box bg-sci" data-code="05366090"><div class="c-name">Training</div><div class="c-code">05366090 (0)</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="plan-section">
+                    <div class="plan-row">
+                        <div class="plan-label" style="color:var(--navy);">PLAN 1 : PROJECT</div>
+                        <div class="semester-col">
+                            <div class="sem-title">SEM 4/1</div>
+                            <div class="course-box bg-sci" data-code="05366091"><div class="c-name">Project 1</div><div class="c-code">05366091 (3)</div></div>
+                            <div class="course-box bg-eng" data-code="0123xxxx_P4"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-eng" data-code="0123xxxx_P5"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_P1"><div class="c-name">Free Elective 1</div><div class="c-code">xxxxxxx (3)</div></div>
+                        </div>
+                        <div class="semester-col">
+                            <div class="sem-title">SEM 4/2</div>
+                            <div class="course-box bg-sci" data-code="05366092"><div class="has-pre-icon">🔗</div><div class="c-name">Project 2</div><div class="c-code">05366092 (3)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_P2"><div class="c-name">Free Elective 2</div><div class="c-code">xxxxxxx (3)</div></div>
+                            <div class="course-box bg-gen" data-code="90xxxxxx_P4"><div class="c-name">General Education</div><div class="c-code">90xxxxxx (3)</div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="plan-row" style="margin-top: 5px;">
+                        <div class="plan-label" style="color:var(--navy);">PLAN 2 : CO-OP / ABROAD</div>
+                        <div class="semester-col" style="flex: 2;">
+                            <div class="course-box bg-sci" style="min-height: 80px;" data-code="05366093"><div class="c-name">Co-operative Education / Oversea Training</div><div class="c-code">05366093 / 05366094 (6)</div></div>
+                        </div>
+                        <div class="semester-col">
+                            <div class="course-box bg-eng" data-code="0123xxxx_P6"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-eng" data-code="0123xxxx_P7"><div class="c-name">Major Elective</div><div class="c-code">0123xxxx (3)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_P3"><div class="c-name">Free Elective 1</div><div class="c-code">xxxxxxx (3)</div></div>
+                            <div class="course-box bg-gen" data-code="xxxxxxx_P4"><div class="c-name">Free Elective 2</div><div class="c-code">xxxxxxx (3)</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-cont" class="view">
+            <div class="curriculum-board" id="board-cont">
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 1/1</div>
+                        <div class="course-box bg-eng" data-code="01446001"><div class="c-name">Calculus</div><div class="c-code">01446001 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446007"><div class="c-name">Interact DE</div><div class="c-code">01446007 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01006012_C"><div class="c-name">Computer Programming</div><div class="c-code">01006012 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446005"><div class="c-name">Circuit & Electronics</div><div class="c-code">01446005 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446004"><div class="c-name">Digital Systems</div><div class="c-code">01446004 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446015"><div class="c-name">Introduction to IoT</div><div class="c-code">01446015 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446006"><div class="c-name">Elec Digi Lab</div><div class="c-code">01446006 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90641008_C"><div class="c-name">Intro to English</div><div class="c-code">90641008 (0)</div></div>
+                        <div class="course-box bg-gen" data-code="90642118_C"><div class="c-name">App Soft for Business</div><div class="c-code">90642118 (2)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 1/2</div>
+                        <div class="course-box bg-eng" data-code="01446002"><div class="has-pre-icon">🔗</div><div class="c-name">Mathematics for Com</div><div class="c-code">01446002 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446009"><div class="has-pre-icon">🔗</div><div class="c-name">Object-Oriented Prog</div><div class="c-code">01446009 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446022"><div class="has-pre-icon">🔗</div><div class="c-name">Com Org & OS</div><div class="c-code">01446022 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446025"><div class="c-name">Principles of Comms</div><div class="c-code">01446025 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0446003"><div class="c-name">Probability & Statistics</div><div class="c-code">0446003 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641007_C"><div class="c-name">Digital Citizen</div><div class="c-code">90641007 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641004_C"><div class="c-name">Team Project 1</div><div class="c-code">90641004 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="90642036_C"><div class="c-name">Prep Activities</div><div class="c-code">90642036 (1)</div></div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 2/1</div>
+                        <div class="course-box bg-eng" data-code="01446024"><div class="c-name">System Analysis</div><div class="c-code">01446024 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446010"><div class="has-pre-icon">🔗</div><div class="c-name">Data Struct & Algo</div><div class="c-code">01446010 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446012"><div class="c-name">Data Communications</div><div class="c-code">01446012 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446008"><div class="has-pre-icon">🔗</div><div class="c-name">Micro & Embedded Sys</div><div class="c-code">01446008 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446020"><div class="c-name">IoT Laboratory 1</div><div class="c-code">01446020 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01446023"><div class="c-name">Cloud Computing Lab</div><div class="c-code">01446023 (1)</div></div>
+                        <div class="course-box bg-eng" data-code="01446019"><div class="c-name">Sensors & Cyber-Phys</div><div class="c-code">01446019 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="9064xxx_L"><div class="c-name">Gen-Ed Language</div><div class="c-code">9064xxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641009_C"><div class="c-name">English Inter Comms 1</div><div class="c-code">90641009 (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 2/2</div>
+                        <div class="course-box bg-eng" data-code="01446018"><div class="c-name">Cyber Security</div><div class="c-code">01446018 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446016"><div class="has-pre-icon">🔗</div><div class="c-name">PLC and Industrial IoT</div><div class="c-code">01446016 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446011"><div class="has-pre-icon">🔗</div><div class="c-name">Database Systems</div><div class="c-code">01446011 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446014"><div class="c-name">Web App Development</div><div class="c-code">01446014 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446021"><div class="c-name">IoT Laboratory 2</div><div class="c-code">01446021 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="9064xxx_G2"><div class="c-name">General Education 2</div><div class="c-code">9064xxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641010_C"><div class="c-name">English Inter Comms 2</div><div class="c-code">90641010 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641005_C"><div class="c-name">Team Project 2</div><div class="c-code">90641005 (1)</div></div>
+                    </div>
+                </div>
+
+                <div class="year-divider"></div>
+
+                <div class="year-group">
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 3/1</div>
+                        <div class="course-box bg-eng" data-code="01446076"><div class="c-name">IoT Project 1</div><div class="c-code">01446076 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0144xxxx_1"><div class="c-name">Major Elective</div><div class="c-code">0144xxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0144xxxx_2"><div class="c-name">Major Elective</div><div class="c-code">0144xxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446017"><div class="c-name">AI of Things (AIoT)</div><div class="c-code">01446017 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="01446013"><div class="c-name">Internet Networks</div><div class="c-code">01446013 (3)</div></div>
+                        <div class="course-box bg-gen" data-code="9064xxxx_G1"><div class="c-name">General Education 1</div><div class="c-code">9064xxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="xxxxxxx_C1"><div class="c-name">Free Elective 1</div><div class="c-code">xxxxxxx (3)</div></div>
+                    </div>
+
+                    <div class="semester-col">
+                        <div class="sem-title">SEM 3/2</div>
+                        <div class="course-box bg-eng" data-code="01446077"><div class="has-pre-icon">🔗</div><div class="c-name">IoT Project 2</div><div class="c-code">01446077 (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0144xxxx_3"><div class="c-name">Major Elective</div><div class="c-code">0144xxxx (3)</div></div>
+                        <div class="course-box bg-eng" data-code="0144xxxx_4"><div class="c-name">Major Elective</div><div class="c-code">0144xxxx (3)</div></div>
+                        <div class="course-box bg-gen" data-code="90641006_C"><div class="c-name">Team Project 3</div><div class="c-code">90641006 (1)</div></div>
+                        <div class="course-box bg-gen" data-code="xxxxxxx_C2"><div class="c-name">Free Elective 2</div><div class="c-code">xxxxxxx (3)</div></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="courseModal" class="modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="m-category" class="m-category">CATEGORY</div>
+        <h2 id="m-title" class="m-title">Course Name</h2>
+        <div id="m-code-credit" class="m-code-credit">Code • Credits</div>
+        
+        <div id="prereq-alert" class="prereq-alert">
+            <span style="font-size: 18px;">⚠️</span> 
+            <span><strong>ต้องเรียนผ่านก่อน:</strong> <span id="m-prereq-name">...</span></span>
+        </div>
+
+        <div class="m-desc-box">
+            <div class="m-desc-title">รายละเอียดและประยุกต์ใช้</div>
+            <div id="m-desc" class="m-desc"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const db = {
+        "01006030": { 
+            name: "Calculus 1", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ศึกษาเรื่องลิมิต (Limits) ความต่อเนื่อง (Continuity) การหาอนุพันธ์ของฟังก์ชันตัวแปรเดียว (Derivatives) การประยุกต์ใช้อนุพันธ์ในการหาค่าสูงสุด-ต่ำสุด การหาปริพันธ์เบื้องต้น (Integrals) และการประยุกต์ใช้อินทิกรัลในการหาพื้นที่ใต้กราฟและปริมาตร<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>แคลคูลัสคือรากฐานของการประมวลผลสัญญาณ (Signal Processing) ใช้ในการวิเคราะห์อัตราการเปลี่ยนแปลงของข้อมูลที่รับมาจากเซ็นเซอร์ (เช่น ความเร็ว ความเร่ง อุณหภูมิที่เปลี่ยนไป) รวมถึงใช้ในการคำนวณการใช้พลังงานของอุปกรณ์ (Power Consumption Optimization)<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>คณิตศาสตร์ ม.ปลาย หมวดฟังก์ชัน กราฟเส้นตรง และพาราโบลา</li><li>ตรีโกณมิติพื้นฐาน (sin, cos, tan) และสมการพหุนาม</li></ul>" 
+        },
+        "01006020": { 
+            name: "General Physics 1", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>เรียนรู้ฟิสิกส์ในหมวดกลศาสตร์ (Mechanics) ครอบคลุมเรื่อง เวกเตอร์ กฎการเคลื่อนที่ของนิวตัน งานและพลังงาน โมเมนตัมเชิงเส้น การชน การหมุนของวัตถุแข็งเกร็ง กลศาสตร์ของไหล และหลักการอุณหพลศาสตร์เบื้องต้น (Thermodynamics)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เมื่อต้องพัฒนาอุปกรณ์ IoT ที่มีการเคลื่อนไหว (Actuators) เช่น หุ่นยนต์, แขนกล, โดรน หรือการทำงานกับเซ็นเซอร์วัดความเร่ง (Accelerometer) และเซ็นเซอร์วัดการเอียง (Gyroscope) ความเข้าใจเรื่องแรงและความเร่งคือสิ่งที่ขาดไม่ได้<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>ฟิสิกส์ ม.4-5 (การแตกแรง, กฎของนิวตัน)</li><li>คณิตศาสตร์เรื่อง เวกเตอร์ พื้นฐาน</li></ul>" 
+        },
+        "01006021": { 
+            name: "General Physics Lab 1", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองทางฟิสิกส์เพื่อพิสูจน์ทฤษฎีกลศาสตร์ที่เรียนในวิชา General Physics 1 เช่น การทดลองการเคลื่อนที่แบบโพรเจกไทล์ การวัดค่าความเร่งโน้มถ่วง การชน และการแกว่งของลูกตุ้ม<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ฝึกทักษะการเก็บข้อมูล (Data Collection) การอ่านค่าจากเครื่องมือวัด และการวิเคราะห์ค่าความคลาดเคลื่อน (Error Analysis) ซึ่งเป็นทักษะที่สำคัญมากในการ Calibration ค่าจากเซ็นเซอร์ IoT ในชีวิตจริง<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>การใช้งานโปรแกรม Excel เบื้องต้นสำหรับการพลอตกราฟ</li></ul>" 
+        },
+        "01236604": { 
+            name: "Circuit and Electronics", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การวิเคราะห์วงจรไฟฟ้ากระแสตรง (DC) และกระแสสลับ (AC) กฎของโอห์ม กฎของเคอร์ชอฟฟ์ (KCL/KVL) ทฤษฎีบทเทฟวินินและนอร์ตัน ศึกษาการทำงานของอุปกรณ์อิเล็กทรอนิกส์พื้นฐาน เช่น ตัวต้านทาน, ตัวเก็บประจุ, ไดโอด, BJT, MOSFET และออปแอมป์ (Op-Amps)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>หัวใจหลักของการสร้างฮาร์ดแวร์ IoT! ใช้ในการออกแบบวงจรจัดการพลังงาน (Power Management) การปรับสภาพสัญญาณอนาล็อกก่อนส่งเข้าไมโครคอนโทรลเลอร์ (Signal Conditioning) และการต่อวงจรขับโหลดกระแสสูง<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>ฟิสิกส์ ม.ปลาย หมวดไฟฟ้ากระแสตรง</li><li>คณิตศาสตร์เรื่องการแก้สมการเชิงเส้นหลายตัวแปร</li></ul>" 
+        },
+        "01006012": { 
+            name: "Computer Programming", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วิชาพื้นฐานการเขียนโปรแกรมคอมพิวเตอร์ (มักใช้ภาษา C หรือ Python) ครอบคลุม ชนิดของข้อมูล ตัวแปร ตัวดำเนินการ นิพจน์ โครงสร้างการควบคุม (if-else, switch) การวนซ้ำ (for, while) อาร์เรย์ สายอักขระ ฟังก์ชัน และการจัดการหน่วยความจำเบื้องต้น<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>นี่คือเครื่องมือในการสร้าง 'สมอง' ให้กับระบบ IoT โค้ดดิ้งเป็นภาษาที่คุณใช้สั่งงานไมโครคอนโทรลเลอร์ (Firmware) และประมวลผลข้อมูลที่รับมาจากเซ็นเซอร์ เป็นวิชาที่สำคัญที่สุดสำหรับสายงานซอฟต์แวร์<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>การคิดวิเคราะห์เชิงตรรกะ (Logical Thinking) และการลำดับขั้นตอน (Algorithm)</li></ul>" 
+        },
+        "01236611": { 
+            name: "Introduction to IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ภาพรวมของเทคโนโลยี Internet of Things สถาปัตยกรรมของระบบ (Edge, Fog, Cloud) ทำความรู้จักกับองค์ประกอบต่างๆ เช่น Sensors, Actuators, Microcontrollers, โปรโตคอลการสื่อสาร (MQTT, HTTP) และกรณีศึกษาต่างๆ เช่น Smart Home, Smart City, Smart Farming<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>วิชานี้เป็นเข็มทิศนำทางตลอด 4 ปี ช่วยให้ผู้เรียนเห็น 'ภาพใหญ่' ว่าแต่ละชิ้นส่วนทำงานร่วมกันอย่างไร ก่อนที่จะต้องแยกย้ายไปเรียนเจาะลึกฮาร์ดแวร์หรือซอฟต์แวร์ในชั้นปีที่สูงขึ้น<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>ความสนใจในการติดตามข่าวสารเทคโนโลยีและนวัตกรรมใหม่ๆ รอบตัว</li></ul>" 
+        },
+        "01236605": { 
+            name: "Cir & Elec Lab", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การลงมือปฏิบัติจริงในห้องแล็บ ฝึกการต่อวงจรไฟฟ้าบนแผงทดลอง (Protoboard) การใช้งานเครื่องมือวัดทางไฟฟ้า เช่น ดิจิทัลมัลติมิเตอร์ (Digital Multimeter), ออสซิลโลสโคป (Oscilloscope) และเครื่องกำเนิดสัญญาณ (Signal Generator)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ฝึกทักษะทางวิศวกรรมฮาร์ดแวร์ที่แท้จริง ทำให้คุณสามารถอ่านวงจรได้ ประกอบวงจรเป็น และที่สำคัญคือทักษะการค้นหาและแก้ไขข้อบกพร่องทางฮาร์ดแวร์ (Hardware Debugging)" 
+        },
+        "01236610": { 
+            name: "3D Drawing", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเขียนแบบวิศวกรรมเบื้องต้นด้วยโปรแกรมคอมพิวเตอร์ (CAD) เช่น SolidWorks, AutoCAD หรือ Fusion360 เรียนรู้การสร้างโมเดล 3 มิติ (3D Modeling) การประกอบชิ้นส่วน (Assembly) และการทำแบบสั่งงาน (2D Drawing)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เมื่อฮาร์ดแวร์ IoT ของคุณประกอบเสร็จ มันไม่สามารถปล่อยเป็นสายไฟเปลือยๆ ได้ คุณต้องใช้ทักษะวิชานี้ในการออกแบบเคสหรือกล่องหุ้มอุปกรณ์ (Enclosure) เพื่อนำไปผลิตจริงด้วย 3D Printer" 
+        },
+        "01006031": { 
+            name: "Calculus 2", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01006030"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วิชาภาคต่อของ Calculus 1 เจาะลึกเทคนิคการหาปริพันธ์ขั้นสูง การหาปริพันธ์ไม่ตรงแบบ ลำดับและอนุกรม อนุกรมเทย์เลอร์ พิกัดเชิงขั้ว และแคลคูลัสของฟังก์ชันหลายตัวแปร (อนุพันธ์ย่อย, ปริพันธ์หลายชั้น)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>แคลคูลัสหลายตัวแปรเป็นกลไกสำคัญเบื้องหลังการทำงานของ Machine Learning และ AI (เช่น อัลกอริทึม Gradient Descent) รวมถึงถูกใช้ในการคำนวณคลื่นแม่เหล็กไฟฟ้าในวิชาระบบเครือข่ายไร้สาย<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>เนื้อหาทั้งหมดจากวิชา Calculus 1 (ห้ามลืมเด็ดขาด)</li></ul>" 
+        },
+        "01006022": { 
+            name: "General Physics 2", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01006020"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ฟิสิกส์หมวด 'ไฟฟ้าและแม่เหล็ก' ศึกษาเกี่ยวกับ ประจุไฟฟ้า กฎของคูลอมบ์ สนามไฟฟ้า ศักย์ไฟฟ้า ตัวเก็บประจุ กระแสไฟฟ้า สนามแม่เหล็ก การเหนี่ยวนำแม่เหล็กไฟฟ้า คลื่นแม่เหล็กไฟฟ้า และทัศนศาสตร์ (Optics) เบื้องต้น<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>การสื่อสารข้อมูลของ IoT ทั้งหมด (Wi-Fi, Bluetooth, 5G) อาศัย 'คลื่นแม่เหล็กไฟฟ้า' วิชานี้จะสอนให้เข้าใจที่มาของคลื่น การแผ่กระจายสัญญาณ และหลักการออกแบบเสาอากาศ<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>ฟิสิกส์ 1 (เรื่องเวกเตอร์) และ ฟิสิกส์ ม.ปลาย หมวดไฟฟ้าสถิตและแม่เหล็กไฟฟ้า</li></ul>" 
+        },
+        "01006023": { 
+            name: "Gen Phys Lab 2", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: ["01006021"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองเพื่อพิสูจน์ทฤษฎีทางไฟฟ้า แม่เหล็ก และทัศนศาสตร์ เช่น การทดลองกฎของโอห์ม การวัดสนามแม่เหล็ก การแทรกสอดและการเลี้ยวเบนของแสง" 
+        },
+        "01236251": { 
+            name: "Discrete Mathematics", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>คณิตศาสตร์ของระบบดิจิทัล (แบบไม่ต่อเนื่อง) ครอบคลุมเรื่อง ตรรกศาสตร์ (Logic) ทฤษฎีเซต ความสัมพันธ์และฟังก์ชัน การพิสูจน์ทางคณิตศาสตร์ ทฤษฎีกราฟ (Graph Theory) ต้นไม้ (Trees) และพีชคณิตบูลีน (Boolean Algebra)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>นี่คือวิชาที่เป็นรากฐานของวิทยาการคอมพิวเตอร์ ทฤษฎีกราฟใช้ในการวิเคราะห์เส้นทาง (Routing) ของระบบเครือข่าย IoT พีชคณิตบูลีนใช้ในการออกแบบวงจรดิจิทัล และตรรกศาสตร์ใช้ในการเขียนเงื่อนไขโปรแกรมที่ซับซ้อน<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>คณิตศาสตร์ ม.4 เรื่อง เซต และ ตรรกศาสตร์เบื้องต้น</li></ul>" 
+        },
+        "01236613": { 
+            name: "Object-Oriented Programming", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01006012"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>กระบวนทัศน์การเขียนโปรแกรมเชิงวัตถุ (OOP) มักใช้ภาษา Java, C++ หรือ Python เรียนรู้แนวคิดของการสร้าง คลาส (Class), ออบเจกต์ (Object), การห่อหุ้มข้อมูล (Encapsulation), การสืบทอด (Inheritance) และภาวะพหุสัณฐาน (Polymorphism)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ระบบ IoT ซอฟต์แวร์ระดับเซิร์ฟเวอร์หรือแอปพลิเคชันที่มีขนาดใหญ่จำเป็นต้องใช้โครงสร้างแบบ OOP เพื่อให้โค้ดเป็นระเบียบ จัดการง่าย และสามารถนำกลับมาใช้ซ้ำ (Reusable) ได้อย่างมีประสิทธิภาพ<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>พื้นฐานการเขียนโปรแกรม (ตัวแปร, การวนลูป, ฟังก์ชัน) จากวิชา Com Prog</li></ul>" 
+        },
+        "01236601": { 
+            name: "Probability and Statistics", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการความน่าจะเป็น ตัวแปรสุ่ม การแจกแจงความน่าจะเป็นแบบไม่ต่อเนื่องและแบบต่อเนื่อง (เช่น Normal, Poisson, Binomial) สถิติเชิงพรรณนา สถิติเชิงอนุมาน การประมาณค่า การทดสอบสมมติฐาน และการวิเคราะห์การถดถอยเชิงเส้น (Linear Regression)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ข้อมูลที่รับมาจากเซ็นเซอร์มักจะมีสัญญาณรบกวน (Noise) วิชาสถิติช่วยให้คุณสามารถคัดกรองข้อมูลขยะออกได้ นอกจากนี้ สถิติยังเป็นกระดูกสันหลังของการทำ Data Analytics และ Machine Learning เพื่อคาดการณ์ความน่าจะเป็นในอนาคต (Predictive Maintenance)" 
+        },
+        "01236619": { 
+            name: "Interactive Design", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการออกแบบปฏิสัมพันธ์ (Human-Computer Interaction: HCI) จิตวิทยาผู้ใช้งาน การออกแบบส่วนต่อประสานกับผู้ใช้ (User Interface: UI) และประสบการณ์ผู้ใช้ (User Experience: UX) การทำ Prototype และ Usability Testing<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ระบบ IoT ที่ดีต้องมีหน้าแดชบอร์ดหรือแอปพลิเคชันที่ใช้งานง่าย วิชานี้ช่วยให้คุณสามารถออกแบบหน้าจอควบคุมที่ตอบโจทย์ผู้ใช้งานจริง และดูมีความเป็นมืออาชีพ" 
+        },
+
+        "01236600": { 
+            name: "Differential Equations and Linear Algebra", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ประกอบด้วยสองส่วนหลัก 1. สมการเชิงอนุพันธ์ (ODEs) ระดับแรกและระดับสูง การแปลงลาปลาซ (Laplace Transforms) 2. พีชคณิตเชิงเส้น ระบบสมการเชิงเส้น เมทริกซ์ ปริภูมิเวกเตอร์ ค่าเจาะจงและเวกเตอร์เจาะจง (Eigenvalues & Eigenvectors)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>สมการอนุพันธ์ใช้สร้างแบบจำลองทางคณิตศาสตร์สำหรับระบบกายภาพ (เช่น ระบบควบคุมความร้อนของหุ่นยนต์) ในขณะที่เมทริกซ์คือโครงสร้างข้อมูลหลักที่อัลกอริทึมปัญญาประดิษฐ์ (AI) และระบบประมวลผลภาพ (Computer Vision) ใช้ในการคำนวณ<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>Calculus 1 & 2</li><li>คณิตศาสตร์ ม.ปลาย เรื่องเมทริกซ์เบื้องต้น</li></ul>" 
+        },
+        "01236615": { 
+            name: "Principles of Communication", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีการสื่อสารเบื้องต้น การวิเคราะห์สัญญาณในโดเมนเวลาและโดเมนความถี่ (Fourier Analysis) การมอดูเลตสัญญาณแอนะล็อก (AM, FM) และการมอดูเลตสัญญาณดิจิทัล (ASK, FSK, PSK) รวมถึงผลกระทบของสัญญาณรบกวน (Noise)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ทำความเข้าใจว่าข้อมูล (เช่น ค่าอุณหภูมิ 25 องศา) ถูกแปลงเป็นคลื่นวิทยุแล้วส่งผ่านอากาศไปยังตัวรับได้อย่างไร เป็นวิชาปูทางสู่การออกแบบระบบเครือข่ายไร้สาย" 
+        },
+        "01236603": { 
+            name: "Digital Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ระบบเลขฐานและรหัส การลดรูปสมการลอจิก (K-maps) การออกแบบและวิเคราะห์วงจรเชิงจัดหมู่ (Combinational Logic เช่น Adders, Multiplexers) และวงจรเชิงลำดับ (Sequential Logic เช่น Flip-flops, Registers, Counters) เครื่องจักรสถานะ (FSM) และแนะนำภาษาอธิบายฮาร์ดแวร์ (Verilog/VHDL)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>นี่คือวิชาที่เผยความลับของโครงสร้างชิปประมวลผล (Microchip/IC) การเข้าใจลอจิกเกตจะทำให้คุณเข้าใจพื้นฐานการทำงานระดับต่ำสุดของไมโครคอนโทรลเลอร์และระบบดิจิทัลทั้งหมด" 
+        },
+        "01236609": { 
+            name: "Digital Systems Laboratory", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการออกแบบและประกอบวงจรดิจิทัลจริง โดยใช้ไอซีลอจิกเกต (Logic Gates IC) บนแผงทดลอง และการทดลองออกแบบวงจรดิจิทัลบนบอร์ด FPGA" 
+        },
+        "01236614": { 
+            name: "Data Structures and Algorithms", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01236613"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การจัดการโครงสร้างข้อมูลแบบต่างๆ เช่น ลิสต์, สแต็ก, คิว, ทรี (Trees), กราฟ (Graphs) และตารางแฮช (Hash Tables) รวมถึงการวิเคราะห์ความซับซ้อนของอัลกอริทึม (Big-O Notation) ในการค้นหาและเรียงลำดับข้อมูล<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เมื่อเซ็นเซอร์นับหมื่นตัวส่งข้อมูลเข้ามาพร้อมกัน คุณจะเขียนโปรแกรมอย่างไรให้เซิร์ฟเวอร์ค้นหาข้อมูลที่ต้องการได้ในเสี้ยววินาที วิชานี้จะมอบเครื่องมือในการรีดประสิทธิภาพ (Optimization) ของซอฟต์แวร์ให้ทำงานได้รวดเร็วและใช้หน่วยความจำน้อยที่สุด<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>ทักษะการเขียนโปรแกรมเชิงวัตถุ (OOP) ในระดับที่เชี่ยวชาญ</li></ul>" 
+        },
+        "01236626": { 
+            name: "System Analysis and Design", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วงจรการพัฒนาระบบ (SDLC) การเก็บรวบรวมและวิเคราะห์ความต้องการ (Requirements) การวิเคราะห์กระบวนการทำงาน การออกแบบสถาปัตยกรรมระบบ การใช้แผนภาพ UML เพื่อจำลองระบบซอฟต์แวร์ก่อนการเขียนโค้ดจริง<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ก่อนสร้างระบบ IoT ให้ลูกค้า คุณต้องวิเคราะห์ให้ออกว่าระบบต้องการเซ็นเซอร์อะไร เซิร์ฟเวอร์วางแบบไหน และฐานข้อมูลเชื่อมกันอย่างไร วิชานี้ช่วยให้คุณทำงานซอฟต์แวร์อย่างเป็นระบบวิศวกรรม" 
+        },
+        "01236256": { 
+            name: "Cloud Computing Laboratory 1", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการใช้งานบริการคลาวด์สาธารณะ (เช่น AWS, Google Cloud, Azure) การสร้าง Virtual Machines (IaaS) การจัดการเครือข่ายจำลองบนคลาวด์ การจัดการฐานข้อมูลบนคลาวด์ และระบบความปลอดภัยเบื้องต้น" 
+        },
+        "01236616": { 
+            name: "Data Communications", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมเครือข่ายคอมพิวเตอร์ โมเดลอ้างอิง OSI และ TCP/IP โพรโทคอลเครือข่ายระดับต่างๆ สื่อกลางการส่งข้อมูล การตรวจสอบและแก้ไขข้อผิดพลาด (Error Detection) การกำหนดหมายเลขไอพี (IP Addressing) และโปรโตคอลการหาเส้นทาง (Routing)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>อุปกรณ์ IoT เชื่อมต่อกับอินเทอร์เน็ตได้อย่างไร? IP Address ทำงานแบบไหน? วิชานี้จะอธิบายระบบท่อส่งข้อมูลทั้งหมดที่เชื่อมโลกเข้าไว้ด้วยกัน" 
+        },
+        "01236618": { 
+            name: "Mobile Application Development", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเขียนโปรแกรมพัฒนาแอปพลิเคชันบนอุปกรณ์เคลื่อนที่ (อาจใช้ Framework เช่น Flutter, React Native หรือ Native Android/iOS) การออกแบบ UI สถาปัตยกรรมแอปฯ การเชื่อมต่อ API แบบ RESTful และการใช้งานเซ็นเซอร์บนมือถือ<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>สร้างหน้ากาก (Frontend) หรือแดชบอร์ดบนสมาร์ทโฟน เพื่อให้ผู้ใช้สามารถกดสั่งเปิดปิดอุปกรณ์ (Actuators) หรือดูสถานะข้อมูลจากเซ็นเซอร์ได้ทุกที่ทุกเวลา" 
+        },
+        "01236627": { 
+            name: "Computer Organization and Operating Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โครงสร้างพื้นฐานของระบบคอมพิวเตอร์ การทำงานของซีพียู (CPU Datapath & Control) ลำดับชั้นของหน่วยความจำ (Cache, RAM) สถาปัตยกรรมชุดคำสั่ง (ISA) ควบคู่กับหลักการทำงานของระบบปฏิบัติการ (OS) การจัดการโปรเซส การจัดการหน่วยความจำ และระบบไฟล์<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เข้าใจลึกซึ้งว่าโค้ดบรรทัดที่เราเขียน ถูกระบบปฏิบัติการ (เช่น Linux หรือ RTOS) นำไปบริหารจัดการบนฮาร์ดแวร์จริงได้อย่างไร ซึ่งจำเป็นมากเวลาเขียนโปรแกรมบนอุปกรณ์สเปกต่ำ (Edge Devices)" 
+        },
+        "01236630": { 
+            name: "Database Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01236614"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>แนวคิดของระบบฐานข้อมูล การออกแบบฐานข้อมูลด้วย ER-Model และ Relational Model การนอร์มัลไลเซชัน (Normalization) ภาษาเรียกค้นข้อมูล SQL การควบคุมภาวะพร้อมกัน (Concurrency) และภาพรวมของฐานข้อมูล NoSQL<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>อุปกรณ์ IoT จะส่งข้อมูล (Telemetry) เข้ามาเป็นจำนวนมหาศาลทุกวินาที วิศวกรต้องออกแบบฐานข้อมูลที่แข็งแกร่ง รองรับการเขียนข้อมูลปริมาณมาก (Big Data) และเรียกดูได้อย่างรวดเร็ว" 
+        },
+        "01236617": { 
+            name: "Sensors and Cyber-Physical Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการทางฟิสิกส์ของเซ็นเซอร์และทรานสดิวเซอร์ชนิดต่างๆ (แสง, อุณหภูมิ, แรง, ตำแหน่ง, ก๊าซ) วงจรปรับสภาพสัญญาณ (Signal Conditioning) และการบูรณาการระบบฮาร์ดแวร์-ซอฟต์แวร์เข้าสู่ระบบไซเบอร์-ฟิสิคัล (CPS)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เซ็นเซอร์คือ 'ดวงตาและประสาทสัมผัส' ของระบบ IoT วิชานี้สอนวิธีเลือกใช้เซ็นเซอร์ให้ตรงกับงาน และวิธีดึงค่าสัญญาณทางฟิสิกส์ออกมาเป็นข้อมูลดิจิทัลได้อย่างแม่นยำ" 
+        },
+        "01236628": { 
+            name: "Cloud Computing Laboratory 2", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการระบบคลาวด์ขั้นสูง เน้นการประยุกต์ใช้งานสถาปัตยกรรมแบบ Microservices, การสร้างและการบริหารจัดการ Container (Docker, Kubernetes), Serverless Computing และการทำระบบ CI/CD Pipeline สำหรับแอปพลิเคชัน IoT" 
+        },
+
+        "01236629": { 
+            name: "Wireless Networks for IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>เจาะลึกเทคโนโลยีการสื่อสารไร้สายที่ออกแบบมาสำหรับระบบ IoT โดยเฉพาะ ครอบคลุมทั้งระยะสั้น (Bluetooth, Zigbee, Z-Wave), ระยะกลาง (Wi-Fi), และระยะไกลพลังงานต่ำ (LPWAN เช่น LoRaWAN, NB-IoT, Sigfox) รวมถึงโปรโตคอลแอปพลิเคชัน (MQTT, CoAP)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ผู้เรียนจะสามารถออกแบบได้ว่า โปรเจกต์สมาร์ทฟาร์มในป่าควรใช้เครือข่าย LoRaWAN หรือโปรเจกต์สมาร์ทโฮมควรใช้เครือข่าย Zigbee เพื่อให้เหมาะสมกับระยะทางและการใช้พลังงานแบตเตอรี่" 
+        },
+        "01236622": { 
+            name: "Cyber Security", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการความมั่นคงปลอดภัยทางไซเบอร์ การเข้ารหัสลับ (Cryptography) แบบสมมาตรและอสมมาตร (AES, RSA) ฟังก์ชันแฮช ลายมือชื่อดิจิทัล ความปลอดภัยของเครือข่าย ช่องโหว่ของระบบ IoT และวิธีการป้องกันการโจมตี (Threat Mitigation)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ระบบ IoT มักตกเป็นเป้าหมายของแฮกเกอร์ (เช่น Botnet) วิชานี้สอนการสร้างระบบที่มีการยืนยันตัวตน (Authentication) และการเข้ารหัสข้อมูลระหว่างเซ็นเซอร์กับคลาวด์ไม่ให้ถูกดักจับได้" 
+        },
+        "01236621": { 
+            name: "AI of Things (AIoT)", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การนำเทคโนโลยีปัญญาประดิษฐ์ (AI) มาผนวกกับ IoT เรียนรู้หลักการของ Machine Learning, Deep Learning เบื้องต้น, การฝึกสอนโมเดล (Model Training) และการนำโมเดลไปรันบนอุปกรณ์ปลายทางขนาดเล็ก (Edge AI หรือ TinyML)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เปลี่ยนจากเซ็นเซอร์ธรรมดาให้มีความฉลาด เช่น กล้องวงจรปิดที่สามารถวิเคราะห์และแยกแยะใบหน้าคนได้ด้วยตัวเอง หรือระบบที่คาดการณ์เวลาที่เครื่องจักรจะเสีย (Predictive Maintenance) ก่อนที่มันจะพังจริงๆ" 
+        },
+        "01236625": { 
+            name: "Seminar", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "0", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การสืบค้นข้อมูล บทความวิจัย และเทคโนโลยีล้ำสมัยในสายงานวิศวกรรมระบบไอโอที ผู้เรียนจะต้องเตรียมหัวข้อ นำเสนอ (Presentation) และอภิปรายแลกเปลี่ยนความรู้กับเพื่อนและอาจารย์ เพื่อฝึกทักษะการสื่อสารเชิงวิชาการ" 
+        },
+        "01236623": { 
+            name: "IoT Laboratory 1", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการบูรณาการระบบ IoT เบื้องต้น นำความรู้จากวิชาการเขียนโปรแกรม ไมโครคอนโทรลเลอร์ และเซ็นเซอร์ มาต่อวงจรจริง เขียนโค้ดอ่านค่า และส่งข้อมูลขึ้นไปแสดงผลบนแพลตฟอร์มคลาวด์ (IoT Dashboard)" 
+        },
+        "01236612": { 
+            name: "Micro & Embedded Sys", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01236603"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมของไมโครคอนโทรลเลอร์ (เช่น ARM Cortex) การเขียนโปรแกรมภาษา C ควบคุมฮาร์ดแวร์ การจัดการอินเทอร์รัปต์ (Interrupts) ตัวตั้งเวลา (Timers) วงจรแปลงสัญญาณ (ADC/DAC) การสื่อสารข้อมูลอนุกรม (UART, SPI, I2C) และแนะนำระบบปฏิบัติการเวลาจริง (RTOS)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>วิชาแกนหลักในการสร้าง 'อุปกรณ์ Edge' ผู้เรียนจะสามารถนำชิปประมวลผลขนาดเล็ก (เช่น ESP32 หรือ STM32) มาเขียนโปรแกรมสั่งงานให้มันทำหน้าที่เป็นโหนดอัจฉริยะ (Smart Node) สำหรับเชื่อมต่อเซ็นเซอร์ต่างๆ ได้" 
+        },
+        "01236620": { 
+            name: "PLC and Industrial IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โครงสร้างและหลักการทำงานของ Programmable Logic Controller (PLC) การเขียนโปรแกรมด้วยภาษาแลดเดอร์ (Ladder Logic) ระบบควบคุม SCADA การสื่อสารในอุตสาหกรรม (Modbus, OPC UA) และการบูรณาการ PLC เข้ากับระบบ Industrial IoT (IIoT)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>วิชาสายตรงสำหรับงานอุตสาหกรรม (Smart Factory) สอนวิธีดึงข้อมูลจากเครื่องจักรเก่าๆ ในโรงงาน ให้สามารถส่งข้อมูลขึ้นระบบคลาวด์เพื่อทำการวิเคราะห์แบบ Real-time ได้" 
+        },
+        "01236267": { 
+            name: "IoT Laboratory 2", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการพัฒนาระบบ IoT ขั้นสูงแบบครบวงจร (End-to-End Solution) ตั้งแต่การออกแบบฮาร์ดแวร์โหนด การตั้งค่าเครือข่ายไร้สาย (เช่น LoRaWAN) การจัดการข้อมูลบนคลาวด์ และการดึงข้อมูลมาแสดงผลบนโมบายแอปพลิเคชัน" 
+        },
+
+        "01236606": { 
+            name: "IoT Project 1", cat: "MAJOR PROJECT", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>จุดเริ่มต้นของปริญญานิพนธ์ (Senior Project) ผู้เรียนต้องจับกลุ่ม ค้นหาปัญหา เสนอไอเดียนวัตกรรม IoT เพื่อแก้ปัญหา ศึกษาค้นคว้างานวิจัยที่เกี่ยวข้อง ออกแบบสถาปัตยกรรมระบบเบื้องต้น และเขียนข้อเสนอโครงงาน (Proposal) นำเสนอต่อคณะกรรมการ" 
+        },
+        "01236607": { 
+            name: "IoT Project 2", cat: "MAJOR PROJECT", color: "var(--color-major)", credit: "3", pre: ["01236606"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ภาคต่อของ Project 1 ลงมือสร้างชิ้นงานนวัตกรรม IoT จริง ประกอบฮาร์ดแวร์ พัฒนาซอฟต์แวร์ ทดสอบการทำงานของระบบ รวบรวมและวิเคราะห์ผลการทดลอง เขียนรายงานปริญญานิพนธ์ฉบับสมบูรณ์ และขึ้นสอบป้องกันความเข้าหน้าของโครงงาน" 
+        },
+        "01236608": { 
+            name: "Capstone Project", cat: "MAJOR PROJECT", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โครงงานบูรณาการองค์ความรู้ทางวิศวกรรม เน้นการทำงานร่วมกันเป็นทีมขนาดใหญ่เพื่อแก้ปัญหาโจทย์ที่มาจากภาคอุตสาหกรรมหรือสังคมจริง ฝึกทักษะการบริหารจัดการโครงการ การประเมินความเป็นไปได้ทางเศรษฐศาสตร์ และจรรยาบรรณวิชาชีพวิศวกร" 
+        },
+        "01006029": { 
+            name: "Co-operative Ed / Study Abroad", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "6", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การออกไปฝึกประสบการณ์วิชาชีพในโลกการทำงานจริง ผู้เรียนสามารถเลือกไปปฏิบัติงานแบบเต็มเวลาในรูปแบบสหกิจศึกษา (Co-op) กับบริษัทเทคโนโลยีชั้นนำเป็นเวลา 1 ภาคการศึกษา หรือเลือกเดินทางไปศึกษาแลกเปลี่ยน/ฝึกงาน ณ สถาบันและองค์กรในต่างประเทศ เพื่อสร้างเสริมประสบการณ์ระดับนานาชาติ" 
+        },
+
+        "05016201": { 
+            name: "Calculus 1", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทบทวนฟังก์ชัน ลิมิตและความต่อเนื่อง อนุพันธ์ของฟังก์ชันพีชคณิตและฟังก์ชันอดิศัย การประยุกต์อนุพันธ์ การอินทิเกรตเบื้องต้น และการประยุกต์อินทิกรัลจำกัดเขต<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>เครื่องมือพื้นฐานที่สุดในการแก้ปัญหาทางฟิสิกส์และวิศวกรรม ใช้คำนวณอัตราการเปลี่ยนแปลงและพื้นที่ใต้กราฟ ซึ่งจำเป็นในการประมวลผลสัญญาณจากเซ็นเซอร์<br><br><strong>📚 สิ่งที่ควรเตรียมตัว/ทบทวนมาก่อน</strong><ul><li>คณิตศาสตร์ ม.ปลาย หมวดแคลคูลัสเบื้องต้น ตรีโกณมิติ และลอการิทึม</li></ul>" 
+        },
+        "05366001": { 
+            name: "Physics 1", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>กลศาสตร์คลาสสิก ปริมาณทางฟิสิกส์และเวกเตอร์ จลนศาสตร์ กฎการเคลื่อนที่ งานและพลังงาน โมเมนตัม การหมุน ความโน้มถ่วง สมบัติทางกลของสสาร และกลศาสตร์ของไหล<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>สร้างความเข้าใจรากฐานของปรากฏการณ์ทางกายภาพ เพื่อประยุกต์ใช้ในการสร้างเซ็นเซอร์ตรวจจับการเคลื่อนไหว การสั่นสะเทือน และการออกแบบโครงสร้างทางกลสำหรับฮาร์ดแวร์" 
+        },
+        "05366002": { 
+            name: "Physics Lab 1", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การทดลองทางฟิสิกส์ที่สอดคล้องกับเนื้อหาวิชา Physics 1 เน้นทักษะการใช้เครื่องมือวัด การบันทึกผล การวิเคราะห์ข้อมูล และการหาค่าความคลาดเคลื่อน<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ฝึกฝนกระบวนการทางวิทยาศาสตร์ การ Calibration เครื่องมือวัด ซึ่งสำคัญมากในการทำสอบเซ็นเซอร์ระดับอุตสาหกรรม" 
+        },
+        "05366043": { 
+            name: "Engineering Drawing WS", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>พื้นฐานการเขียนแบบวิศวกรรม การใช้เครื่องมือและซอฟต์แวร์ช่วยออกแบบ (CAD) การอ่านแบบ 2 มิติและ 3 มิติ มาตรฐานการเขียนแบบทางอุตสาหกรรม<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>การออกแบบกล่อง (Enclosure) สำหรับอุปกรณ์ IoT การทำแบบพิมพ์ 3 มิติ (3D Printing) หรือชิ้นส่วนทางกลในระบบ Cyber-Physical" 
+        },
+        "05206500": { 
+            name: "Biology", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โครงสร้างและหน้าที่ของเซลล์ กระบวนการเผาผลาญพลังงาน พันธุศาสตร์เบื้องต้น วิวัฒนาการ นิเวศวิทยา และความหลากหลายทางชีวภาพ<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ความรู้พื้นฐานสำหรับการพัฒนาระบบ IoT ทางการเกษตร (Smart Farming) อุปกรณ์สวมใส่ทางการแพทย์ (Wearable Health Devices) และไบโอเซ็นเซอร์ (Biosensors)" 
+        },
+        "05206501": { 
+            name: "Biology Lab", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองทางชีววิทยา การใช้กล้องจุลทรรศน์ การศึกษาโครงสร้างเซลล์ และกระบวนการทางชีวภาพพื้นฐาน" 
+        },
+        "01236255": { 
+            name: "Introduction to IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมและองค์ประกอบของระบบ IoT (Internet of Things) การทำงานร่วมกันระหว่างเซ็นเซอร์ เครือข่าย และระบบประมวลผลบนคลาวด์ พร้อมศึกษา Use Case จริงในอุตสาหกรรม<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ปูพื้นฐานแนวคิดระบบอัจฉริยะ เพื่อให้ผู้เรียนเห็นภาพรวมก่อนนำความรู้ทางฟิสิกส์มาสร้างเซ็นเซอร์เพื่อเชื่อมต่อเข้าสู่ระบบนี้" 
+        },
+        "01006012_P": { 
+            name: "Computer Programming", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ตรรกะการเขียนโปรแกรมและอัลกอริทึมเบื้องต้น การใช้งานตัวแปร ลูป เงื่อนไข ฟังก์ชัน และโครงสร้างข้อมูลพื้นฐาน (มักใช้ภาษา C หรือ Python)<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ภาษาหลักที่ใช้ในการวิเคราะห์ข้อมูลทางฟิสิกส์ และเป็นพื้นฐานสำคัญสำหรับการเขียนโปรแกรมลงไมโครคอนโทรลเลอร์" 
+        },
+        "05016202": { 
+            name: "Calculus 2", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05016201"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>เทคนิคการอินทิเกรต อินทิกรัลไม่ตรงแบบ ลำดับและอนุกรม อนุกรมกำลัง พิกัดเชิงขั้ว ฟังก์ชันหลายตัวแปร และอนุพันธ์ย่อย<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>คณิตศาสตร์ขั้นสูงที่จำเป็นสำหรับการแก้สมการคลื่นแม่เหล็กไฟฟ้า อุณหพลศาสตร์ และการวิเคราะห์โมเดล Machine Learning แบบหลายมิติ" 
+        },
+        "05366003": { 
+            name: "Physics 2", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05366001"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การสั่นและคลื่น ปรากฏการณ์ทางเสียง ไฟฟ้าสถิต สนามไฟฟ้า ศักย์ไฟฟ้า สนามแม่เหล็ก การเหนี่ยวนำแม่เหล็กไฟฟ้า วงจรไฟฟ้ากระแสสลับ และทัศนศาสตร์เชิงเรขาคณิต<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>รากฐานของการสื่อสารไร้สาย (Wireless) การออกแบบเสาอากาศ และความเข้าใจเรื่องคลื่นแสงสำหรับเซ็นเซอร์แบบออปติคัล" 
+        },
+        "05366004": { 
+            name: "Physics Lab 2", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: ["05366002"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองเรื่องคลื่น เสียง ไฟฟ้าสถิต วงจรแม่เหล็กไฟฟ้า และคุณสมบัติของแสง เพื่อพิสูจน์ทฤษฎีใน Physics 2" 
+        },
+        "01236254": { 
+            name: "Circuit & Electronics", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีวงจรไฟฟ้า กฎของโอห์มและเคอร์ชอฟฟ์ วงจร R-L-C พื้นฐานอุปกรณ์อิเล็กทรอนิกส์สารกึ่งตัวนำ ไดโอด ทรานซิสเตอร์ และออปแอมป์<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>วิชาบังคับสำหรับการสร้างและออกแบบบอร์ดฮาร์ดแวร์ เพื่อจัดการพลังงานและปรับสภาพสัญญาณแอนะล็อกจากเซ็นเซอร์" 
+        },
+        "01236249": { 
+            name: "Digital Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ระบบเลขฐาน พีชคณิตบูลีน ลอจิกเกต วงจรเชิงจัดหมู่ วงจรเชิงลำดับ ฟลิปฟลอป ตัวนับ เรจิสเตอร์ และการออกแบบระบบดิจิทัลเบื้องต้น<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ทำความเข้าใจการทำงานระดับฮาร์ดแวร์ของไมโครชิปและชิปประมวลผลต่างๆ ในระบบคอมพิวเตอร์และอุปกรณ์ IoT" 
+        },
+        "01236257": { 
+            name: "OOP & Data Structures", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01006012_P"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการเขียนโปรแกรมเชิงวัตถุ (Object-Oriented) โครงสร้างข้อมูลแบบต่างๆ (List, Stack, Queue, Tree) และอัลกอริทึมการค้นหาและจัดเรียงข้อมูล<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>การจัดการและประมวลผลชุดข้อมูลขนาดใหญ่ (Big Data) จากเซ็นเซอร์ และการพัฒนาซอฟต์แวร์ระดับเซิร์ฟเวอร์ที่มีประสิทธิภาพสูง" 
+        },
+        "05366020": { 
+            name: "Mathematical Physics", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05016202"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>คณิตศาสตร์ประยุกต์ขั้นสูงสำหรับฟิสิกส์ สมการเชิงอนุพันธ์สามัญและย่อย การแปลงฟูเรียร์และลาปลาซ ฟังก์ชันพิเศษ และพีชคณิตเชิงเส้น<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>เครื่องมือสำคัญในการสร้างแบบจำลองทางคณิตศาสตร์ของระบบเซ็นเซอร์ การไหลของความร้อน และการประมวลผลสัญญาณดิจิทัลขั้นสูง" 
+        },
+        "05366023": { 
+            name: "Electronic Circuits", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05366003"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การวิเคราะห์วงจรอิเล็กทรอนิกส์เชิงลึก วงจรขยายสัญญาณด้วยทรานซิสเตอร์ (BJT, FET) วงจรขยายแบบป้อนกลับ ออสซิลเลเตอร์ และการประยุกต์ใช้ออปแอมป์แบบซับซ้อน<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>การออกแบบวงจรภาคหน้า (Front-end) สำหรับเซ็นเซอร์ทางฟิสิกส์ เพื่อขยายสัญญาณที่อ่อนมากๆ ให้สามารถนำไปประมวลผลต่อได้" 
+        },
+        "05366024": { 
+            name: "Electronics Lab", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองต่อวงจรอิเล็กทรอนิกส์จริง การวิเคราะห์พฤติกรรมของวงจรขยายสัญญาณและออสซิลเลเตอร์ด้วยเครื่องมือวัดทางไฟฟ้ามาตรฐานอุตสาหกรรม" 
+        },
+        "05366032": { 
+            name: "Electromagnetic Field", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีสนามแม่เหล็กไฟฟ้าขั้นสูง สมการของแมกซ์เวลล์ (Maxwell's Equations) การแผ่กระจายของคลื่น ท่อนำคลื่น (Waveguides) และหลักการแผ่รังสีของเสาอากาศ<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>หัวใจสำคัญของการพัฒนาระบบสื่อสารไร้สายความเร็วสูง (5G, Radar) และการออกแบบเสาอากาศสำหรับอุปกรณ์ IoT ให้มีประสิทธิภาพสูงสุด" 
+        },
+        "05366036": { 
+            name: "Micro & Embedded Sys", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมไมโครคอนโทรลเลอร์ การเขียนโปรแกรมภาษา C/C++ ควบคุมฮาร์ดแวร์ การจัดการอินเทอร์รัปต์ การแปลงสัญญาณ A/D D/A และโปรโตคอลการสื่อสาร (I2C, SPI)<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>วิชาแกนหลักในการสร้างอุปกรณ์ Edge Node นำโค้ดมาสั่งงานฮาร์ดแวร์เพื่ออ่านค่าจากเซ็นเซอร์และส่งขึ้นระบบเครือข่าย" 
+        },
+        "05366034": { 
+            name: "Sensors & Transducers", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05366023"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการทางฟิสิกส์และวัสดุศาสตร์ของเซ็นเซอร์ประเภทต่างๆ (อุณหภูมิ, แสง, แรง, ความดัน, ก๊าซ) และเทคนิคการปรับสภาพสัญญาณ<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ดวงตาและประสาทสัมผัสของระบบ IoT! ผู้เรียนจะสามารถเลือกและออกแบบเซ็นเซอร์ที่แม่นยำสูงเพื่อใช้งานในโรงงานอุตสาหกรรมได้" 
+        },
+        "05366039": { 
+            name: "Int Physics Lab 1", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองทางฟิสิกส์ประยุกต์ เน้นการใช้งานเซ็นเซอร์และเครื่องมือวัดทางไฟฟ้าที่เกี่ยวข้องกับกระบวนการผลิตในภาคอุตสาหกรรม" 
+        },
+        "01236258": { 
+            name: "Principles of Comms", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการเบื้องต้นของระบบสื่อสารข้อมูล การแปลงสัญญาณทั้งแบบแอนะล็อกและดิจิทัล การวิเคราะห์สัญญาณในโดเมนความถี่ แบนด์วิดท์ และผลกระทบของสัญญาณรบกวน" 
+        },
+        "05366027": { 
+            name: "Digital Elec Lab", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการออกแบบวงจรดิจิทัล การใช้งานไอซีลอจิกเกต และการจำลองการทำงานของวงจรดิจิทัลด้วยซอฟต์แวร์และฮาร์ดแวร์จริง" 
+        },
+        "05366028": { 
+            name: "Mechanics", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>กลศาสตร์วิเคราะห์ขั้นสูง พลศาสตร์ของอนุภาคและระบบอนุภาค กลศาสตร์ของลากรานจ์และแฮมิลตัน การแกว่งกวัด และการเคลื่อนที่แบบศูนย์กลาง<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ใช้ในการวิเคราะห์การเคลื่อนที่ของเครื่องจักรกล แขนกลหุ่นยนต์ (Robotics) และระบบอัตโนมัติในโรงงาน (Industrial Automation)" 
+        },
+        "05366030": { 
+            name: "Modern Physics", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีสัมพัทธภาพพิเศษ ฟิสิกส์ควอนตัมยุคต้น โครงสร้างอะตอม รังสีเอกซ์ ทวิภาวะของคลื่นและอนุภาค และฟิสิกส์นิวเคลียร์เบื้องต้น<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>วิชาปูพื้นฐานเพื่อนำไปสู่การเข้าใจฟิสิกส์ระดับอนุภาค ซึ่งเป็นหัวใจของการทำงานของสารกึ่งตัวนำและชิปประมวลผลทุกชนิดบนโลก" 
+        },
+        "05366033": { 
+            name: "Waves & Optics", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สมการคลื่น ทัศนศาสตร์เชิงกายภาพ การแทรกสอด การเลี้ยวเบน โพลาไรเซชัน ทัศนศาสตร์เชิงเรขาคณิต เลเซอร์ และเส้นใยนำแสง (Fiber Optics)<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>การประยุกต์ใช้ในการสร้างเซ็นเซอร์แบบออปติคัล ระบบ LiDAR สำหรับรถยนต์ไร้คนขับ และระบบสื่อสารข้อมูลผ่านไฟเบอร์ออปติกความเร็วสูง" 
+        },
+        "05366040": { 
+            name: "Int Physics Lab 2", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองขั้นสูงที่เกี่ยวข้องกับปรากฏการณ์ทางฟิสิกส์ยุคใหม่ ทัศนศาสตร์ เลเซอร์ และการประยุกต์ใช้งานในระดับอุตสาหกรรม" 
+        },
+        "05366038": { 
+            name: "Industrial Statistics", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถิติประยุกต์สำหรับวิศวกรรม การกระจายความน่าจะเป็น การทดสอบสมมติฐาน การวิเคราะห์ความแปรปรวน และการควบคุมคุณภาพเชิงสถิติ (SPC)<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ใช้ในการวิเคราะห์ข้อมูลการผลิตในโรงงาน ควบคุมคุณภาพของฮาร์ดแวร์ และคัดกรองข้อมูลจากเซ็นเซอร์ IoT ปริมาณมหาศาล" 
+        },
+        "01236259": { 
+            name: "IoT Network & Data", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมเครือข่ายสำหรับ IoT โปรโตคอลการสื่อสาร (เช่น MQTT, CoAP, LoRaWAN) และการบริหารจัดการฐานข้อมูลขนาดใหญ่ที่รับมาจากเซ็นเซอร์นับหมื่นตัว" 
+        },
+        "01236262": { 
+            name: "Interactive Design", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การออกแบบส่วนต่อประสานกับผู้ใช้ (UI/UX) การสร้าง Dashboard ที่ใช้งานง่ายสำหรับการควบคุมและตรวจสอบสถานะของระบบ IoT ในโรงงาน" 
+        },
+        "01236261": { 
+            name: "Mobile App Dev", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การพัฒนาแอปพลิเคชันบนสมาร์ทโฟน เพื่อเป็นรีโมทคอนโทรลหรือแดชบอร์ดพกพาสำหรับตรวจสอบค่าทางฟิสิกส์แบบเรียลไทม์" 
+        },
+        "01236265": { 
+            name: "Cyber Security", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเข้ารหัสลับ (Cryptography) การรักษาความปลอดภัยเครือข่าย และการป้องกันระบบควบคุมทางอุตสาหกรรม (ICS) จากการโจมตีทางไซเบอร์" 
+        },
+
+        "05106030": { 
+            name: "Chemistry", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>เคมีทั่วไป โครงสร้างอะตอม พันธะเคมี ปริมาณสัมพันธ์ จลนศาสตร์เคมี สมดุลเคมี ทฤษฎีกรด-เบส และเคมีไฟฟ้า<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ความรู้พื้นฐานในการทำความเข้าใจวัสดุศาสตร์ (Material Science) การออกแบบแบตเตอรี่ เซ็นเซอร์วัดก๊าซหรือสารเคมีในระบบ IoT อุตสาหกรรม" 
+        },
+        "05106042": { 
+            name: "Chemistry Lab", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองเคมีพื้นฐาน ฝึกทักษะการใช้เครื่องมือทางเคมี การวิเคราะห์สาร และการสังเกตปฏิกิริยาเคมีที่เป็นรากฐานของวัสดุทางวิศวกรรม" 
+        },
+        "05366031": { 
+            name: "Thermal & Stat Phys", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>กฎอุณหพลศาสตร์ เอนโทรปี กลศาสตร์เชิงสถิติของแมกซ์เวลล์-โบลทซ์มันน์ สถิติของอนุภาคควอนตัม (Fermi-Dirac, Bose-Einstein)<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ใช้ในการวิเคราะห์การกระจายความร้อนของชิปประมวลผล (Thermal Management) และการทำความเข้าใจพฤติกรรมของอิเล็กตรอนในสารกึ่งตัวนำ" 
+        },
+        "05366035": { 
+            name: "Physics Semiconductors", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีแถบพลังงาน (Band Theory) พฤติกรรมของอิเล็กตรอนและโฮล รอยต่อ P-N ฟิสิกส์ของอุปกรณ์สารกึ่งตัวนำ เช่น ไดโอด ทรานซิสเตอร์แบบ BJT และ MOSFET<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>เจาะลึกความลับของระดับชั้นซิลิคอน วิชานี้จะอธิบายว่าไมโครชิป โซลาร์เซลล์ และเซ็นเซอร์แสง ถูกสร้างขึ้นมาและทำงานในระดับอิเล็กตรอนได้อย่างไร" 
+        },
+        "05366080": { 
+            name: "Seminar", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การค้นคว้า สรุป และนำเสนอหัวข้อวิจัยทางฟิสิกส์ประยุกต์หรือนวัตกรรม IoT เพื่อพัฒนาทักษะการสื่อสารเชิงวิชาการและการคิดเชิงวิพากษ์" 
+        },
+        "05366041": { 
+            name: "Ind Physics Lab 1", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดสอบพฤติกรรมของวัสดุและอุปกรณ์กึ่งตัวนำ การวัดค่าทางฟิสิกส์ด้วยเครื่องมือวัดความแม่นยำสูงในระบบอุตสาหกรรม" 
+        },
+        "01236264": { 
+            name: "AIoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การนำเทคโนโลยี Machine Learning มาประมวลผลข้อมูลจากเซ็นเซอร์ การรันโมเดล AI บนอุปกรณ์ขนาดเล็ก (Edge AI) เพื่อสร้างระบบอุตสาหกรรมอัจฉริยะ" 
+        },
+
+        "05366029": { 
+            name: "Quantum Mechanics", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05366030"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ฟังก์ชันคลื่น สมการชเรอดิงเงอร์ (Schrödinger equation) ใน 1 มิติและ 3 มิติ โมเมนตัมเชิงมุม สปินของอิเล็กตรอน และอะตอมไฮโดรเจน<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>ทฤษฎีขั้นสุดยอดที่เป็นจุดกำเนิดของเทคโนโลยีอนาคต เช่น Quantum Computing และ Quantum Sensors ที่มีความไวสูงระดับอะตอม" 
+        },
+        "05366037": { 
+            name: "Measurement & Inst", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีการวัด มาตรฐานการวัด การสอบเทียบเครื่องมือวัด (Calibration) การประมวลผลและลดทอนสัญญาณรบกวนในระบบเครื่องมือวัดอุตสาหกรรม<br><br><strong>⚙️ การประยุกต์ใช้ในงานฟิสิกส์อุตสาหกรรมและ IoT</strong><br>วิศวกร IoT จะต้องออกแบบระบบเซ็นเซอร์ที่มีความถูกต้อง (Accuracy) และความแม่นยำ (Precision) สูงสุด เพื่อให้ระบบอัตโนมัติทำงานไม่ผิดพลาด" 
+        },
+        "05366042": { 
+            name: "Ind Physics Lab 2", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการขั้นสูงที่บูรณาการความรู้ฟิสิกส์ การควบคุมเครื่องมือวัดอัตโนมัติ และการดึงข้อมูลเข้าสู่คอมพิวเตอร์ (Data Acquisition)" 
+        },
+        "05xxxxxx": { 
+            name: "Physics Elective", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเชิงลึกทางฟิสิกส์ตามความสนใจ เช่น วัสดุศาสตร์ (Material Science), เลเซอร์ประยุกต์, หรือฟิสิกส์การแพทย์" 
+        },
+        "01236263": { 
+            name: "Industrial IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>เทคโนโลยีระบบควบคุมในโรงงานอุตสาหกรรม (PLC, SCADA) การนำระบบเดิมมาเชื่อมโยงเข้ากับเครือข่ายอินเทอร์เน็ตเพื่อสร้าง Smart Factory" 
+        },
+        "05366090": { 
+            name: "Training", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "0", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การฝึกงานภาคฤดูร้อนในหน่วยงานวิจัยหรือโรงงานอุตสาหกรรม เพื่อเปิดประสบการณ์การทำงานจริงก่อนทำโปรเจกต์จบ" 
+        },
+
+        "05366091": { 
+            name: "Project 1", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การสืบค้นงานวิจัย ออกแบบนวัตกรรมที่บูรณาการความรู้ฟิสิกส์อุตสาหกรรมร่วมกับ IoT และนำเสนอโครงร่าง (Proposal) ของปริญญานิพนธ์" 
+        },
+        "05366092": { 
+            name: "Project 2", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "3", pre: ["05366091"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การลงมือปฏิบัติสร้างชิ้นงานฮาร์ดแวร์และซอฟต์แวร์ ทดสอบสมรรถนะ วิเคราะห์ผล เขียนรายงานฉบับสมบูรณ์ และสอบป้องกันโครงงาน" 
+        },
+        "05366093": { 
+            name: "Co-operative Education / Oversea Training", cat: "SCIENCE & MATH", color: "var(--color-math)", credit: "6", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การปฏิบัติงานเต็มเวลาเสมือนพนักงานจริงในสถานประกอบการ หรือหน่วยงานวิจัยทั้งในและต่างประเทศเป็นเวลา 1 ภาคการศึกษา" 
+        },
+
+        "01446001": { 
+            name: "Calculus", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การทบทวนและปรับพื้นฐานคณิตศาสตร์วิศวกรรม ลิมิต อนุพันธ์ การประยุกต์ใช้อนุพันธ์ การหาปริพันธ์ และสมการเชิงอนุพันธ์เบื้องต้น<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>จำเป็นสำหรับการคำนวณวงจรไฟฟ้าขั้นสูง การประมวลผลสัญญาณจากเซ็นเซอร์ และเป็นพื้นฐานสำหรับการเรียนรู้ปัญญาประดิษฐ์ในอนาคต" 
+        },
+        "01446007": { 
+            name: "Interact DE", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการออกแบบส่วนต่อประสานกับผู้ใช้ (User Interface - UI) และประสบการณ์ผู้ใช้ (User Experience - UX) กระบวนการคิดเชิงออกแบบ (Design Thinking) และการสร้างต้นแบบแอปพลิเคชัน (Prototyping)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ทักษะจำเป็นสำหรับการสร้าง Dashboard ควบคุมระบบ IoT หรือแอปพลิเคชันบนสมาร์ทโฟนที่ใช้งานง่ายและตอบโจทย์ผู้ใช้งานจริงในอุตสาหกรรม" 
+        },
+        "01006012_C": { 
+            name: "Computer Programming", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ตรรกะการเขียนโปรแกรม การใช้งานตัวแปร โครงสร้างเงื่อนไข (if-else) การวนซ้ำ (loop) อาร์เรย์ และฟังก์ชัน โดยมักใช้ภาษา C หรือ Python เป็นเครื่องมือหลัก<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>วิชาที่สำคัญที่สุดในการก้าวเข้าสู่สายงานนักพัฒนาซอฟต์แวร์ หรือการเขียนโปรแกรมระดับเฟิร์มแวร์เพื่อควบคุมฮาร์ดแวร์ไมโครคอนโทรลเลอร์" 
+        },
+        "01446005": { 
+            name: "Circuit & Electronics", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีวงจรไฟฟ้ากระแสตรงและกระแสสลับ กฎของโอห์มและเคอร์ชอฟฟ์ การทำงานของอุปกรณ์อิเล็กทรอนิกส์ เช่น ตัวต้านทาน คาปาซิเตอร์ ไดโอด และทรานซิสเตอร์<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>การเข้าใจวงจรไฟฟ้าเป็นหัวใจในการประกอบฮาร์ดแวร์ การจัดการระบบจ่ายพลังงานแบตเตอรี่ และการต่อวงจรเซ็นเซอร์เข้ากับบอร์ดทดลองไม่ให้ลัดวงจร" 
+        },
+        "01446004": { 
+            name: "Digital Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ระบบเลขฐานสอง ลอจิกเกต (Logic Gates) พีชคณิตบูลีน การออกแบบวงจรดิจิทัลเชิงจัดหมู่ (Combinational) และวงจรเชิงลำดับ (Sequential) เช่น ฟลิปฟลอป (Flip-Flops)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ทำความเข้าใจการทำงานพื้นฐานของหน่วยประมวลผล (CPU) และหน่วยความจำ เป็นประโยชน์ในการเชื่อมต่อและสื่อสารข้อมูลดิจิทัลกับเซ็นเซอร์อุตสาหกรรม" 
+        },
+        "01446015": { 
+            name: "Introduction to IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ภาพรวมของสถาปัตยกรรมอินเทอร์เน็ตของสรรพสิ่ง (Internet of Things) โครงสร้างฮาร์ดแวร์ เครือข่ายการสื่อสาร และการจัดการข้อมูลบนคลาวด์ พร้อมศึกษา Use Case ในภาคอุตสาหกรรมและชีวิตประจำวัน<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เป็นวิชาปรับพื้นฐานความคิด (Mindset) ให้เห็นภาพรวมของระบบทั้งหมด ก่อนที่จะแยกไปศึกษาเจาะลึกในแต่ละส่วนในภาคการศึกษาต่อไป" 
+        },
+        "01446006": { 
+            name: "Elec Digi Lab", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการทดลองต่อวงจรไฟฟ้าและวงจรดิจิทัล การใช้งานมัลติมิเตอร์ ออสซิลโลสโคป และการต่อวงจรไอซีบน Protoboard<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ฝึกทักษะช่างเทคนิคและวิศวกรในการประกอบฮาร์ดแวร์จริง การอ่านวงจร (Schematic) และการหาสาเหตุเมื่อวงจรเกิดข้อผิดพลาด (Hardware Debugging)" 
+        },
+        "01446002": { 
+            name: "Mathematics for Com", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01446001"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>คณิตศาสตร์ดิสครีต พีชคณิตเชิงเส้น เมทริกซ์ ทฤษฎีกราฟ และตรรกศาสตร์ ซึ่งเป็นคณิตศาสตร์สำหรับการคำนวณทางคอมพิวเตอร์<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เมทริกซ์และทฤษฎีกราฟ ถูกนำไปใช้โดยตรงในการเขียนอัลกอริทึมค้นหาเส้นทางเครือข่าย การเข้ารหัสข้อมูล และการคำนวณในระบบปัญญาประดิษฐ์ (AI)" 
+        },
+        "01446009": { 
+            name: "Object-Oriented Prog", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01006012_C"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเขียนโปรแกรมเชิงวัตถุ (OOP) เน้นการสร้าง Class, Object, การสืบทอด (Inheritance) และภาวะพหุสัณฐาน (Polymorphism) ด้วยภาษาเช่น Python หรือ Java<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>โครงสร้างพื้นฐานในการพัฒนาแอปพลิเคชันหรือเซิร์ฟเวอร์ขนาดใหญ่ ทำให้โค้ดเป็นระเบียบ นำกลับมาใช้ใหม่ได้ง่าย และทำงานร่วมกันในทีมได้ดีขึ้น" 
+        },
+        "01446022": { 
+            name: "Com Org & OS", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01446005"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมภายในคอมพิวเตอร์ การทำงานของ CPU, หน่วยความจำ (Memory Hierarchy) และหลักการทำงานของระบบปฏิบัติการ (OS) ในการจัดการทรัพยากร<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ช่วยให้เข้าใจการรันโปรแกรมบนอุปกรณ์สเปกต่ำ (Edge Devices) การจัดการคิวการทำงาน (Process Management) และการเลือกใช้ RTOS ให้เหมาะสมกับฮาร์ดแวร์" 
+        },
+        "01446025": { 
+            name: "Principles of Comms", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทฤษฎีการสื่อสาร สัญญาณแอนะล็อกและดิจิทัล การมอดูเลตสัญญาณ (Modulation) แบนด์วิดท์ และการวิเคราะห์สัญญาณรบกวนในการส่งข้อมูล<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>พื้นฐานในการทำความเข้าใจว่า ข้อมูลจากเซ็นเซอร์ถูกแปลงเป็นคลื่นวิทยุและส่งผ่านอากาศไปยังเกตเวย์รับสัญญาณได้อย่างไร" 
+        },
+        "0446003": { 
+            name: "Probability & Statistics", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ความน่าจะเป็น การแจกแจงข้อมูลแบบต่างๆ สถิติพรรณนา สถิติอนุมาน การทดสอบสมมติฐาน และการวิเคราะห์การถดถอย<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ใช้สำหรับคัดกรองข้อมูลรบกวน (Noise Filtering) จากเซ็นเซอร์ และเป็นรากฐานในการทำ Data Science และ Machine Learning เพื่อพยากรณ์พฤติกรรมของระบบ" 
+        },
+        "01446024": { 
+            name: "System Analysis", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วงจรการพัฒนาระบบซอฟต์แวร์ (SDLC) การเก็บ Requirement จากลูกค้า การใช้ UML ในการวาดแบบแปลนระบบ ฐานข้อมูล และการออกแบบสถาปัตยกรรม<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ทักษะสำคัญสำหรับวิศวกรและนักวิเคราะห์ระบบ ช่วยให้สามารถออกแบบสถาปัตยกรรม IoT ทั้งระบบ (ฮาร์ดแวร์ยันคลาวด์) ได้อย่างเป็นขั้นเป็นตอนก่อนลงมือเขียนโค้ด" 
+        },
+        "01446010": { 
+            name: "Data Struct & Algo", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01446009"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การจัดการโครงสร้างข้อมูลในหน่วยความจำ (Stack, Queue, Linked List, Tree, Graph) และอัลกอริทึมการเรียงลำดับ/ค้นหาข้อมูล<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>จำเป็นอย่างยิ่งสำหรับการประมวลผลข้อมูลจากเซ็นเซอร์แบบ Real-time และการเขียนโปรแกรมบนเซิร์ฟเวอร์ที่ต้องการประสิทธิภาพความเร็วสูงสุด" 
+        },
+        "01446012": { 
+            name: "Data Communications", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โมเดลโครงข่าย OSI และ TCP/IP โปรโตคอลการสื่อสารข้อมูลผ่านระบบเครือข่าย การกำหนด IP Address และระบบอินเทอร์เน็ต<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>เป็นวิชาที่สอนให้รู้ว่า บอร์ด IoT สื่อสารผ่าน Wi-Fi/LAN และส่งข้อมูลทะลุผ่าน Router ไปยังเซิร์ฟเวอร์คลาวด์ได้อย่างไร" 
+        },
+        "01446008": { 
+            name: "Micro & Embedded Sys", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01446004"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สถาปัตยกรรมไมโครคอนโทรลเลอร์ การเขียนโปรแกรมภาษา C/C++ ระดับล่างเพื่อควบคุม Register จัดการ Interrupts และสื่อสารผ่านโปรโตคอล (UART, I2C, SPI)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>วิชาที่สร้าง 'Edge Device' นำความรู้ไปเขียนโปรแกรมฝังตัวสั่งให้บอร์ดอ่านค่าเซ็นเซอร์และควบคุมมอเตอร์หรือรีเลย์ได้" 
+        },
+        "01446020": { 
+            name: "IoT Laboratory 1", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการบูรณาการระบบไมโครคอนโทรลเลอร์และเซ็นเซอร์ การเขียนโค้ดเพื่อส่งข้อมูลผ่าน Wi-Fi เข้าสู่ระบบคลาวด์พื้นฐาน" 
+        },
+        "01446023": { 
+            name: "Cloud Computing Lab", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเช่าและตั้งค่าใช้งานเซิร์ฟเวอร์คลาวด์สาธารณะ (AWS, GCP) การจัดการ Linux Server เบื้องต้น และการติดตั้งระบบฐานข้อมูลบนคลาวด์" 
+        },
+        "01446019": { 
+            name: "Sensors & Cyber-Phys", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการทำงานของเซ็นเซอร์และทรานสดิวเซอร์ชนิดต่างๆ การเลือกใช้เซ็นเซอร์ในภาคอุตสาหกรรม และการแปลงสัญญาณแอนะล็อกเป็นดิจิทัล<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>การดึงข้อมูลจากสภาพแวดล้อมจริง (โลกกายภาพ) เข้าสู่โลกไซเบอร์ เพื่อนำไปประมวลผลต่อ" 
+        },
+        "01446018": { 
+            name: "Cyber Security", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>หลักการเข้ารหัสลับ (Cryptography) ภัยคุกคามและการโจมตีทางไซเบอร์ และการรักษาความปลอดภัยของข้อมูลในระบบเครือข่าย<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>อุปกรณ์ IoT มักมีช่องโหว่ วิชานี้สอนวิธีอุดรอยรั่ว ป้องกันการโดนแฮกหรือการดักฟังข้อมูลระหว่างทาง" 
+        },
+        "01446016": { 
+            name: "PLC and Industrial IoT", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01446008"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเขียนโปรแกรมควบคุมเครื่องจักรกลอุตสาหกรรมด้วย PLC การใช้งาน SCADA และการประยุกต์เข้ากับระบบ Industrial IoT<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ทักษะที่ภาคโรงงานและสายงาน Automation ต้องการอย่างสูง การเปลี่ยนเครื่องจักรเก่าให้เป็น Smart Factory" 
+        },
+        "01446011": { 
+            name: "Database Systems", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: ["01446010"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การออกแบบฐานข้อมูลแบบ Relational และ NoSQL การเขียนคำสั่ง SQL เพื่อจัดการข้อมูลอย่างมีประสิทธิภาพ<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ระบบ IoT ผลิตข้อมูลมหาศาล (Big Data) การมีโครงสร้างฐานข้อมูลที่ดีจะทำให้แอปพลิเคชันทำงานได้รวดเร็วไม่หน่วง" 
+        },
+        "01446014": { 
+            name: "Web App Development", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การพัฒนาเว็บไซต์และเว็บแอปพลิเคชัน (Frontend/Backend) การเชื่อมต่อ API แบบ RESTful และการสร้าง Dashboard แบบ Real-time<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>สร้างหน้าจอควบคุมระบบ IoT ผ่านเว็บบราวเซอร์ เพื่อให้ผู้ใช้สามารถควบคุมฮาร์ดแวร์ได้จากทุกมุมโลก" 
+        },
+        "01446021": { 
+            name: "IoT Laboratory 2", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "1", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ปฏิบัติการขั้นสูงในการพัฒนาระบบ IoT แบบ End-to-End นำเซ็นเซอร์ เครือข่าย คลาวด์ และแดชบอร์ดมารวมกันเป็นระบบเดียว" 
+        },
+        "01446076": { 
+            name: "IoT Project 1", cat: "MAJOR PROJECT", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การเสนอหัวข้อโครงงานวิศวกรรมไอโอที ศึกษาปัญหา รวบรวมข้อมูลงานวิจัย และเขียนข้อเสนอโครงการ (Proposal) เพื่อเตรียมการพัฒนา" 
+        },
+        "01446017": { 
+            name: "AI of Things (AIoT)", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การนำระบบปัญญาประดิษฐ์ (AI) และ Machine Learning มาประยุกต์ใช้กับข้อมูล IoT การรันโมเดล AI บนขอบข่าย (Edge Computing)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>ทำให้ระบบสามารถคิดวิเคราะห์ คาดการณ์ความล้มเหลว หรือจดจำรูปแบบพฤติกรรมอัตโนมัติ โดยไม่ต้องพึ่งพามนุษย์" 
+        },
+        "01446013": { 
+            name: "Internet Networks", cat: "ENGINEERING COURSE", color: "var(--color-major)", credit: "3", pre: [], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>เทคโนโลยีเครือข่ายอินเทอร์เน็ตและเครือข่ายไร้สายระยะไกล (LPWAN, LoRaWAN) และโปรโตคอล IoT เฉพาะทาง (MQTT, CoAP)<br><br><strong>⚙️ การประยุกต์ใช้ในงาน IoT</strong><br>การออกแบบระบบเครือข่ายให้ครอบคลุมพื้นที่ขนาดใหญ่ เช่น สมาร์ทฟาร์ม หรือ สมาร์ทซิตี้ โดยใช้พลังงานต่ำที่สุด" 
+        },
+        "01446077": { 
+            name: "IoT Project 2", cat: "MAJOR PROJECT", color: "var(--color-major)", credit: "3", pre: ["01446076"], 
+            desc: "<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การลงมือพัฒนาชิ้นงานนวัตกรรม IoT จริง ประกอบฮาร์ดแวร์ พัฒนาซอฟต์แวร์ ทดสอบระบบ จัดทำรูปเล่มปริญญานิพนธ์ และสอบป้องกันโครงงาน" 
+        },
+
+        "90641008_C":{ name: "Intro to English", cat:"GEN-ED", color:"var(--color-gened)", credit:"0", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ทักษะภาษาอังกฤษพื้นฐานเพื่อปรับตัวเข้าสู่การเรียนระดับมหาวิทยาลัย" },
+        "90642118_C":{ name: "App Soft for Business", cat:"GEN-ED", color:"var(--color-gened)", credit:"2", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การใช้โปรแกรมประยุกต์สำหรับการนำเสนองานและการจัดการธุรกิจ" },
+        "90641007_C":{ name: "Digital Citizen", cat:"GEN-ED", color:"var(--color-gened)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>สิทธิ หน้าที่ จริยธรรม และกฎหมายในสังคมดิจิทัลยุคใหม่" },
+        "90641004_C":{ name: "Team Project 1", cat:"GEN-ED", color:"var(--color-gened)", credit:"1", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>การทำงานกลุ่มเบื้องต้น ฝึกทักษะความเป็นผู้นำและการระดมสมอง" },
+        "90642036_C":{ name: "Prep Activities", cat:"GEN-ED", color:"var(--color-gened)", credit:"1", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>กิจกรรมเตรียมความพร้อมทักษะชีวิตในรั้วมหาวิทยาลัย" },
+        "9064xxx_L":{ name: "Gen-Ed Language", cat:"GEN-ED", color:"var(--color-gened)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วิชาเลือกศึกษาทั่วไปในหมวดภาษาต่างประเทศเพิ่มเติม" },
+        "90641009_C":{ name: "English Inter Comms 1", cat:"GEN-ED", color:"var(--color-gened)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ภาษาอังกฤษเพื่อการสื่อสารในชีวิตประจำวันและการทำงาน" },
+        "9064xxx_G2":{ name: "General Education 2", cat:"GEN-ED", color:"var(--color-gened)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วิชาเลือกเสรีในหมวดศึกษาทั่วไปตามความสนใจของนักศึกษา" },
+        "90641010_C":{ name: "English Inter Comms 2", cat:"GEN-ED", color:"var(--color-gened)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>ภาษาอังกฤษระดับกลางสำหรับการนำเสนองานเชิงวิชาชีพ" },
+        "90641005_C":{ name: "Team Project 2", cat:"GEN-ED", color:"var(--color-gened)", credit:"1", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โครงงานกลุ่มเน้นกระบวนการบริหารจัดการและสร้างสรรค์นวัตกรรม" },
+        "9064xxxx_G1":{ name: "General Education 1", cat:"GEN-ED", color:"var(--color-gened)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>วิชาเลือกเสรีในหมวดศึกษาทั่วไปตามความสนใจของนักศึกษา" },
+        "90641006_C":{ name: "Team Project 3", cat:"GEN-ED", color:"var(--color-gened)", credit:"1", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>โครงงานกลุ่มบูรณาการความรู้เพื่อแก้ปัญหาในสังคมหรือชุมชน" },
+        
+        "0144xxxx_1":{ name: "Major Elective", cat:"ELECTIVE", color:"var(--color-major)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเฉพาะทางในสาขาวิศวกรรมคอมพิวเตอร์และไอโอที เลือกเจาะลึกเทคโนโลยีตามความสนใจ เช่น Advanced AI, Cloud Architecture" },
+        "0144xxxx_2":{ name: "Major Elective", cat:"ELECTIVE", color:"var(--color-major)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเฉพาะทางในสาขาวิศวกรรมคอมพิวเตอร์และไอโอที เลือกเจาะลึกเทคโนโลยีตามความสนใจ" },
+        "0144xxxx_3":{ name: "Major Elective", cat:"ELECTIVE", color:"var(--color-major)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเฉพาะทางในสาขาวิศวกรรมคอมพิวเตอร์และไอโอที เลือกเจาะลึกเทคโนโลยีตามความสนใจ" },
+        "0144xxxx_4":{ name: "Major Elective", cat:"ELECTIVE", color:"var(--color-major)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเฉพาะทางในสาขาวิศวกรรมคอมพิวเตอร์และไอโอที เลือกเจาะลึกเทคโนโลยีตามความสนใจ" },
+        "xxxxxxx_C1":{ name: "Free Elective 1", cat:"FREE", color:"var(--color-free)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเสรี นักศึกษาสามารถเลือกลงทะเบียนเรียนวิชาใดก็ได้ที่เปิดสอนในสถาบัน เพื่อเพิ่มพูนความรู้รอบตัว" },
+        "xxxxxxx_C2":{ name: "Free Elective 2", cat:"FREE", color:"var(--color-free)", credit:"3", pre:[], desc:"<strong>📌 หัวข้อที่ต้องเรียน</strong><br>รายวิชาเลือกเสรี นักศึกษาสามารถเลือกลงทะเบียนเรียนวิชาใดก็ได้ที่เปิดสอนในสถาบัน" }
+    };
+
+    const boardIot = document.getElementById('board-iot');
+    const boardPhys = document.getElementById('board-phys');
+    const boardCont = document.getElementById('board-cont');
+    const courses = document.querySelectorAll('.course-box');
+
+    function switchTab(track) {
+        document.getElementById('btn-iot').classList.remove('active-iot');
+        document.getElementById('btn-phys').classList.remove('active-phys');
+        document.getElementById('btn-cont').classList.remove('active-cont');
+        document.getElementById('view-iot').classList.remove('active');
+        document.getElementById('view-phys').classList.remove('active');
+        document.getElementById('view-cont').classList.remove('active');
+
+        const mainTitle = document.getElementById('main-title');
+        const mainSubtitle = document.getElementById('main-subtitle');
+
+        if(track === 'iot') {
+            document.getElementById('btn-iot').classList.add('active-iot');
+            document.getElementById('view-iot').classList.add('active');
+            mainTitle.style.color = "var(--navy)";
+            mainTitle.innerText = "วศ.บ.วิศวกรรมระบบไอโอทีและสารสนเทศ";
+            mainSubtitle.innerText = "(ฉบับปรับปรุง พ.ศ. 2569) คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง";
+        } else if(track === 'phys') {
+            document.getElementById('btn-phys').classList.add('active-phys');
+            document.getElementById('view-phys').classList.add('active');
+            mainTitle.style.color = "var(--sea-blue)";
+            mainTitle.innerText = "วศ.บ.วิศวกรรมระบบไอโอทีและสารสนเทศและฟิสิกส์อุตสาหกรรม (สองปริญญา)";
+            mainSubtitle.innerText = "(สำหรับรหัส 67-6805xxxx) คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง";
+        } else if(track === 'cont') {
+            document.getElementById('btn-cont').classList.add('active-cont');
+            document.getElementById('view-cont').classList.add('active');
+            mainTitle.style.color = "var(--orange)";
+            mainTitle.innerText = "วศ.บ.วิศวกรรมคอมพิวเตอร์และไอโอที (ต่อเนื่อง)";
+            mainSubtitle.innerText = "(ฉบับปรับปรุง พ.ศ. 2569) คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง";
+        }
+    }
+
+    courses.forEach(course => {
+        course.addEventListener('mouseenter', () => {
+            const code = course.getAttribute('data-code');
+            if(!code || !db[code]) return;
+
+            const activeBoard = course.closest('.curriculum-board');
+            activeBoard.classList.add('board-hovered');
+            course.classList.add('highlight-active');
+
+            const prereqs = db[code].pre || [];
+            
+            activeBoard.querySelectorAll('.course-box').forEach(otherCourse => {
+                const otherCode = otherCourse.getAttribute('data-code');
+                if(!otherCode || !db[otherCode]) return;
+
+                if(prereqs.includes(otherCode)) {
+                    otherCourse.classList.add('highlight-pre');
+                }
+                
+                if(db[otherCode].pre && db[otherCode].pre.includes(code)) {
+                    otherCourse.classList.add('highlight-post');
+                }
+            });
+        });
+
+        course.addEventListener('mouseleave', () => {
+            const activeBoard = course.closest('.curriculum-board');
+            activeBoard.classList.remove('board-hovered');
+            activeBoard.querySelectorAll('.course-box').forEach(c => {
+                c.classList.remove('highlight-active', 'highlight-pre', 'highlight-post');
+            });
+        });
+
+        course.addEventListener('click', () => {
+            const id = course.getAttribute('data-code');
+            const item = db[id];
+            if(!item) return;
+
+            document.getElementById('m-category').innerText = item.cat;
+            document.getElementById('m-title').innerText = item.name;
+            
+            const displayCode = id.split('_')[0];
+            document.getElementById('m-code-credit').innerText = `${displayCode} • ${item.credit} Credits`;
+            
+            document.getElementById('m-desc').innerHTML = item.desc || "ไม่มีข้อมูลคำอธิบายรายวิชา";
+            
+            const alertBox = document.getElementById('prereq-alert');
+            const preNameSpan = document.getElementById('m-prereq-name');
+            if(item.pre && item.pre.length > 0) {
+                const preNames = item.pre.map(pCode => {
+                    const cleanCode = pCode.split('_')[0];
+                    return db[pCode] ? `${db[pCode].name} (${cleanCode})` : cleanCode;
+                }).join(', ');
+                preNameSpan.innerText = preNames;
+                alertBox.classList.add('active');
+            } else {
+                alertBox.classList.remove('active');
+            }
+
+            document.getElementById('courseModal').classList.add('active');
+        });
+    });
+
+    function closeModal() { document.getElementById('courseModal').classList.remove('active'); }
+    document.getElementById('courseModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+</script>
+
+</body>
+</html>

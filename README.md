@@ -1,1 +1,0 @@
-# IOTE-Mobile-app
