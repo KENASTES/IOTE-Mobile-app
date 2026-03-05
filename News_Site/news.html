@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoTE - Latest News | KMITL</title>
+    <meta name="description" content="IoTE KMITL - All Latest News and Announcements">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style_news.css">
+    <link rel="stylesheet" href="news.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="../Image_Source/v703_320.png" alt="IoTE Logo">
+            <div class="logo-info">
+                <div>&#128205; E-12 Building</div>
+                <div>&#9993;
+                    <a href="mailto:iote@kmitl.ac.th">iote@kmitl.ac.th</a>
+                </div>
+            </div>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="../Iote_Main_Web.html" id="nav-home">Home</a></li>
+
+            <li class="has-dropdown">
+                <a href="../Iote_Main_Web.html" id="nav-about">About</a>
+                <div class="dropdown">
+                    <span class="dropdown-label">About</span>
+                    <a href="../Iote_Main_Web.html">IoT System and Information Engineering</a>
+                    <a href="../Iote_Main_Web.html">Dual Degree PhysIoTE (B.Eng + B.Sc)</a>
+                </div>
+            </li>
+
+            <li><a href="../Iote_Main_Web.html" id="nav-programs">Programs</a></li>
+
+            <li class="has-dropdown">
+                <a href="../Iote_Main_Web.html" id="nav-faculty">Faculty</a>
+                <div class="dropdown">
+                    <span class="dropdown-label">Faculty</span>
+                    <a href="../Iote_Main_Web.html">Professor of IoT Systems and Information Engineering</a>
+                    <a href="../Iote_Main_Web.html">Professor of Industrial Physics</a>
+                </div>
+            </li>
+
+            <li><a href="index_news.html" class="active" id="nav-news">News</a></li>
+
+            <li><a href="../Iote_Main_Web.html" id="nav-contact">Contact</a></li>
+
+            <li class="has-dropdown">
+                <a href="#" id="nav-iote-hub">IoTE Hub</a>
+                <div class="dropdown" style="right:0;left:auto;">
+                    <span class="dropdown-label">IoTE Hub</span>
+                    <a href="../Iote_Main_Web.html">&#128197; Study Planner</a>
+                    <a href="../Iote_Main_Web.html">&#127891; Study Advisor</a>
+                    <a href="../Chatbot_Site/Chat_bot_index.html">&#128172; Assistant Chatbot</a>
+                </div>
+            </li>
+        </ul>
+
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- ================= LATEST NEWS - VERTICAL LIST ================= -->
+    <section class="section news-section news-page-section" id="latest-news">
+        <div class="container">
+            <div class="section-header">
+                <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z" />
+                </svg>
+                <h1 class="section-title">Latest News</h1>
+            </div>
+
+            <!-- News Cards - Vertical List -->
+            <div class="news-list" style="display:flex;flex-direction:column;gap:18px;">
+
+                <!-- Reusable news card (full-width block) -->
+                <article class="news-card" id="news-card-1">
+                    <div class="news-card-inner">
+                        <div class="news-card-thumb">
+                            <div class="thumb-placeholder"></div>
+                        </div>
+                        <div class="news-card-content">
+                            <span class="news-tag tag-announcement">ANNOUNCEMENT</span>
+                            <div class="news-time">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>2 hours ago</span>
+                            </div>
+                            <p class="news-excerpt">Important announcement regarding the upcoming semester registration
+                                and course
+                                enrollment procedures.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" id="news-card-2">
+                    <div class="news-card-inner">
+                        <div class="news-card-thumb">
+                            <div class="thumb-placeholder"></div>
+                        </div>
+                        <div class="news-card-content">
+                            <span class="news-tag tag-event">Event</span>
+                            <div class="news-time">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>2 hours ago</span>
+                            </div>
+                            <p class="news-excerpt">Join us for the annual IoTE Technology Expo featuring cutting-edge
+                                innovations and
+                                student projects.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" id="news-card-3">
+                    <div class="news-card-inner">
+                        <div class="news-card-thumb">
+                            <div class="thumb-placeholder"></div>
+                        </div>
+                        <div class="news-card-content">
+                            <span class="news-tag tag-achievement">Achievement</span>
+                            <div class="news-time">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>2 hours ago</span>
+                            </div>
+                            <p class="news-excerpt">Our students won gold medals at the International Robotics
+                                Competition held in
+                                Tokyo, Japan.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" id="news-card-4">
+                    <div class="news-card-inner">
+                        <div class="news-card-thumb">
+                            <div class="thumb-placeholder"></div>
+                        </div>
+                        <div class="news-card-content">
+                            <span class="news-tag tag-partnership">Partnership</span>
+                            <div class="news-time">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>2 hours ago</span>
+                            </div>
+                            <p class="news-excerpt">New collaboration with leading tech companies to provide internship
+                                and career
+                                opportunities.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" id="news-card-5">
+                    <div class="news-card-inner">
+                        <div class="news-card-thumb">
+                            <div class="thumb-placeholder"></div>
+                        </div>
+                        <div class="news-card-content">
+                            <span class="news-tag tag-announcement">ANNOUNCEMENT</span>
+                            <div class="news-time">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>5 hours ago</span>
+                            </div>
+                            <p class="news-excerpt">Scholarship applications for the 2026 academic year are now open.
+                                Apply before the
+                                deadline.</p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Back Button -->
+            <a href="index_news.html" class="back-btn" id="back-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span>Back</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer" id="footer">
+        <div class="footer-inner">
+            <div class="footer-logo-area">
+                <img src="Image_Source/v703_320.png" alt="IoTE Logo" class="footer-logo">
+            </div>
+            <div class="footer-text">
+                <p class="footer-tagline">Shaping The Future Of Technology Through Innovation Education And
+                    Groundbreaking Research</p>
+                <p class="footer-copyright">&copy; 2026 King Mongkut's Institute of Technology Ladkrabang. All rights
+                    reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="news.js"></script>
+</body>
+
+</html>
