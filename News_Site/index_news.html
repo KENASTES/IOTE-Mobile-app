@@ -11,124 +11,124 @@
 </head>
 
 <body>
-        <h1 class="section-title">Latest News</h1>
+  <h1 class="section-title">Latest News</h1>
+  </div>
+
+  <!-- News list: stacked vertically, full-width cards -->
+  <div class="news-list" style="display:flex;flex-direction:column;gap:18px;">
+
+    <!-- Reusable news card (full-width block) -->
+    <article class="news-card" id="news-card-1">
+      <div class="news-card-inner">
+        <div class="news-card-thumb">
+          <div class="thumb-placeholder"></div>
+        </div>
+        <div class="news-card-content">
+          <span class="news-tag tag-announcement">ANNOUNCEMENT</span>
+          <div class="news-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>2 hours ago</span>
+          </div>
+          <p class="news-excerpt">Important announcement regarding the upcoming semester registration and course
+            enrollment procedures.</p>
+        </div>
       </div>
+    </article>
 
-      <!-- News list: stacked vertically, full-width cards -->
-      <div class="news-list" style="display:flex;flex-direction:column;gap:18px;">
-
-        <!-- Reusable news card (full-width block) -->
-        <article class="news-card" id="news-card-1">
-          <div class="news-card-inner">
-            <div class="news-card-thumb">
-              <div class="thumb-placeholder"></div>
-            </div>
-            <div class="news-card-content">
-              <span class="news-tag tag-announcement">ANNOUNCEMENT</span>
-              <div class="news-time">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span>2 hours ago</span>
-              </div>
-              <p class="news-excerpt">Important announcement regarding the upcoming semester registration and course
-                enrollment procedures.</p>
-            </div>
+    <article class="news-card" id="news-card-2">
+      <div class="news-card-inner">
+        <div class="news-card-thumb">
+          <div class="thumb-placeholder"></div>
+        </div>
+        <div class="news-card-content">
+          <span class="news-tag tag-event">Event</span>
+          <div class="news-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>2 hours ago</span>
           </div>
-        </article>
-
-        <article class="news-card" id="news-card-2">
-          <div class="news-card-inner">
-            <div class="news-card-thumb">
-              <div class="thumb-placeholder"></div>
-            </div>
-            <div class="news-card-content">
-              <span class="news-tag tag-event">Event</span>
-              <div class="news-time">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span>2 hours ago</span>
-              </div>
-              <p class="news-excerpt">Join us for the annual IoTE Technology Expo featuring cutting-edge innovations and
-                student projects.</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="news-card" id="news-card-3">
-          <div class="news-card-inner">
-            <div class="news-card-thumb">
-              <div class="thumb-placeholder"></div>
-            </div>
-            <div class="news-card-content">
-              <span class="news-tag tag-achievement">Achievement</span>
-              <div class="news-time">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span>2 hours ago</span>
-              </div>
-              <p class="news-excerpt">Our students won gold medals at the International Robotics Competition held in
-                Tokyo, Japan.</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="news-card" id="news-card-4">
-          <div class="news-card-inner">
-            <div class="news-card-thumb">
-              <div class="thumb-placeholder"></div>
-            </div>
-            <div class="news-card-content">
-              <span class="news-tag tag-partnership">Partnership</span>
-              <div class="news-time">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span>2 hours ago</span>
-              </div>
-              <p class="news-excerpt">New collaboration with leading tech companies to provide internship and career
-                opportunities.</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="news-card" id="news-card-5">
-          <div class="news-card-inner">
-            <div class="news-card-thumb">
-              <div class="thumb-placeholder"></div>
-            </div>
-            <div class="news-card-content">
-              <span class="news-tag tag-announcement">ANNOUNCEMENT</span>
-              <div class="news-time">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span>5 hours ago</span>
-              </div>
-              <p class="news-excerpt">Scholarship applications for the 2026 academic year are now open. Apply before the
-                deadline.</p>
-            </div>
-          </div>
-        </article>
-
+          <p class="news-excerpt">Join us for the annual IoTE Technology Expo featuring cutting-edge innovations and
+            student projects.</p>
+        </div>
       </div>
+    </article>
 
-      <a href="news.html" class="view-all-btn" id="view-all-news">
-        <span>View All News</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12" />
-          <polyline points="12 5 19 12 12 19" />
-        </svg>
-      </a>
-    </div>
+    <article class="news-card" id="news-card-3">
+      <div class="news-card-inner">
+        <div class="news-card-thumb">
+          <div class="thumb-placeholder"></div>
+        </div>
+        <div class="news-card-content">
+          <span class="news-tag tag-achievement">Achievement</span>
+          <div class="news-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>2 hours ago</span>
+          </div>
+          <p class="news-excerpt">Our students won gold medals at the International Robotics Competition held in
+            Tokyo, Japan.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="news-card" id="news-card-4">
+      <div class="news-card-inner">
+        <div class="news-card-thumb">
+          <div class="thumb-placeholder"></div>
+        </div>
+        <div class="news-card-content">
+          <span class="news-tag tag-partnership">Partnership</span>
+          <div class="news-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>2 hours ago</span>
+          </div>
+          <p class="news-excerpt">New collaboration with leading tech companies to provide internship and career
+            opportunities.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="news-card" id="news-card-5">
+      <div class="news-card-inner">
+        <div class="news-card-thumb">
+          <div class="thumb-placeholder"></div>
+        </div>
+        <div class="news-card-content">
+          <span class="news-tag tag-announcement">ANNOUNCEMENT</span>
+          <div class="news-time">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>5 hours ago</span>
+          </div>
+          <p class="news-excerpt">Scholarship applications for the 2026 academic year are now open. Apply before the
+            deadline.</p>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <a href="news.html" class="view-all-btn" id="view-all-news">
+    <span>View All News</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  </a>
+  </div>
   </section>
 
   <!-- ================= TCAS ADMISSION ================= -->
@@ -159,7 +159,8 @@
               </svg>
               <span>January 15, 2026</span>
             </div>
-            <a href="https://admission.reg.kmitl.ac.th/?fbclid=IwY2xjawQWXHVleHRuA2FlbQIxMABicmlkETFFbTRUUTlTR2JCVnBaQUl3c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHp_qFRMKOwEk6LZNkIbYx4H_sjg5YyjEhRZikMcVgs2SG44vYGcg2mlPJh-o_aem_FaswoI8b1OajIBRrSPgrZA#/" class="tcas-apply-btn">Apply</a>
+            <a href="https://admission.reg.kmitl.ac.th/?fbclid=IwY2xjawQWXHVleHRuA2FlbQIxMABicmlkETFFbTRUUTlTR2JCVnBaQUl3c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHp_qFRMKOwEk6LZNkIbYx4H_sjg5YyjEhRZikMcVgs2SG44vYGcg2mlPJh-o_aem_FaswoI8b1OajIBRrSPgrZA#/"
+              class="tcas-apply-btn">Apply</a>
           </div>
         </div>
 
