@@ -11,7 +11,9 @@ const PORT = 3000;
 
 const HuggingFace_API_Key = "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";
 
+
 app.use(cors());
+
 app.use(express.json());
 
 const uploadDir = './News_Image_Storage';
@@ -31,27 +33,24 @@ const upload = multer({ storage: storage });
 
 app.use('/News_Image_Storage', express.static(path.join(__dirname, 'News_Image_Storage')));
 
-app.get('/api/Course', async (Database_Course_API_Request, Database_Course_API_Response) => {
+app.get('/api/Course', async (req, res) => {
     try {
         const Courses = await prisma.course.findMany();
-        Database_Course_API_Response.json({ success: true, data: Courses });
+        res.json({ success: true, data: Courses });
     } catch (error) {
-        Database_Course_API_Response.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-app.post('/api/Course', async (Database_Course_API_Request, Database_Course_API_Response) => {
+app.post('/api/Course', async (req, res) => {
     try {
-        const { code, title } = Database_Course_API_Request.body;
+        const { code, title } = req.body;
         const New_Courses = await prisma.course.create({
-            data: {
-                code,
-                title
-            }
+            data: { code, title }
         });
-        Database_Course_API_Response.json({ success: true, data: New_Courses });
+        res.json({ success: true, data: New_Courses });
     } catch (error) {
-        Database_Course_API_Response.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
@@ -69,12 +68,10 @@ app.get('/api/News', async (req, res) => {
 app.post('/api/News', upload.single('image'), async (req, res) => {
     try {
         const { title, description, refUrl } = req.body;
-        
         let imageUrl = null;
         if (req.file) {
             imageUrl = `http://localhost:${PORT}/News_Image_Storage/${req.file.filename}`;
         }
-
         const newNews = await prisma.News.create({
             data: { title, description, imageUrl, refUrl }
         });
@@ -102,7 +99,6 @@ app.post('/api/Camp_And_Workshop', upload.single('image'), async (req, res) => {
         if (req.file) {
             imageUrl = `http://localhost:${PORT}/News_Image_Storage/${req.file.filename}`;
         }
-
         const newCamp = await prisma.Camp_And_Workshop.create({
             data: { title, description, imageUrl }
         });
@@ -165,6 +161,7 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
+
 app.listen(PORT, () => {
-    console.log(`Server (Database + Chatbot) is running on http://localhost:${PORT}`);
+    console.log(`🚀 Server (Database + Chatbot) is running on http://localhost:${PORT}`);
 });
