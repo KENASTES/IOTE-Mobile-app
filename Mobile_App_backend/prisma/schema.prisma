@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  code  String @unique
+  title String
+}
+
+model News {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  excerpt   String
+  category  String
+  imageUrl  String?
+  RefUrl    String?
+  createdAt DateTime @default(now())
+}
+
+model Camp_And_Workshop {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  imageUrl    String?
+  RefUrl      String?
+  createdAt DateTime @default(now())
+}
+
+model ChatBot {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  User_Prompt String
+  Bot_Response String
+}
