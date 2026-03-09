@@ -1,114 +1,179 @@
-/* ===================================================
-   IoTE NEWS - Flash Card Slider & Responsive JS
-   =================================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ---- Hamburger Menu ----
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
+    const newsData = [
+         {
+             tag: "EVENT",
+             tagClass: "tag-event",
+             time: "2 hours ago",
+             content: "Connect Things 3 event bringing together students and innovators to explore IoT technologies and creative ideas.",
+             image: "Image_Source/news1.png"
+        },
+        {
+              tag: "SEMINAR",
+              tagClass: "tag-event",
+              time: "5 hours ago",
+              content: "Academic seminar on Advanced Persistent Threat with AI discussing cyber security trends and career paths.",
+              image: "Image_Source/news3.jpg"
+        },
+        {
+              tag: "ACHIEVEMENT",
+              tagClass: "tag-achievement",
+              time: "1 day ago",
+              content: "IoTE students received recognition and certificates for their outstanding project demonstration.",
+              image: "Image_Source/news4.jpg"
+        },
+    ];
 
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('open');
-            navLinks.classList.toggle('open');
-        });
+    const tcasData = [
+        {
+            round: "TCAS 1",
+            type: "Portfolio",
+            date: "January 15, 2026",
+            status: "active",
+            link: "https://admission.reg.kmitl.ac.th/"
+        },
+        {
+            round: "TCAS 2",
+            type: "Quota",
+            date: "March 1, 2026",
+            status: "waiting",
+            link: "#"
+        },
+        {
+            round: "TCAS 3",
+            type: "Admission",
+            date: "May 1, 2026",
+            status: "waiting",
+            link: "#"
+        },
+        {
+            round: "TCAS 4",
+            type: "Direct",
+            date: "June 1, 2026",
+            status: "waiting",
+            link: "#"
+        }
+    ];
 
-        navLinks.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('open');
-                navLinks.classList.remove('open');
-            });
-        });
+    const campsData = [
+        { title: "Pre IoTE Camp 4th", desc: "Big announcement for Pre IoTE Camp 4th inviting students to join a special two-day technology camp at KMITL.", image: "Image_Source/camp1.png" },
+        { title: "AI Systems", desc: "Build smart devices with AI integration.", image: "Image_Source/camp2.jpg" },
+        { title: "AI Cyber Camp 2025", desc: "Intensive camp exploring artificial intelligence and cybersecurity through hands-on workshops.", image: "Image_Source/camp3.jpg" },
+        { title: "Road to AI Cybersecurity 2025", desc: "Training and competition program introducing AI, networking, and cybersecurity fundamentals.", image: "Image_Source/camp4.jpg" },
+        { title: "Cybersecurity Training Workshop", desc: "Hands-on cybersecurity training on threat detection, incident response, and XDR security analysis.", image: "Image_Source/camp5.jpg" }
+    ];
 
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                hamburger.classList.remove('open');
-                navLinks.classList.remove('open');
-            }
-        });
-    }
+    const renderNews = () => {
+        const container = document.querySelector('.news-list');
+        if (container) {
+            container.innerHTML = newsData.map((news, i) => `
+                <article class="news-card">
+                    <div class="news-card-inner">
+                        <div class="news-card-thumb">
+                            <img src="${news.image}" alt="news" onerror="this.src='https://via.placeholder.com/150x100'">
+                        </div>
+                        <div class="news-card-content">
+                            <span class="news-tag ${news.tagClass}">${news.tag}</span>
+                            <div class="news-time"><span>${news.time}</span></div>
+                            <p class="news-excerpt">${news.content}</p>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+    };
 
-    // ---- Generic Slider Class ----
+    const renderAdmission = () => {
+        const container = document.querySelector('.tcas-grid');
+        if (container) {
+            container.innerHTML = tcasData.map((tcas, i) => `
+                <div class="tcas-card ${tcas.status === 'active' ? 'tcas-active' : ''}">
+                    <div class="tcas-card-top">
+                        <h3 class="tcas-round">${tcas.round}</h3>
+                        <p class="tcas-type">${tcas.type}</p>
+                    </div>
+                    <div class="tcas-card-bottom">
+                        <div class="tcas-date">
+                            <span>${tcas.date}</span>
+                        </div>
+                        ${tcas.status === 'active' 
+                            ? `<a href="${tcas.link}" class="tcas-apply-btn">Apply</a>` 
+                            : `<span class="tcas-coming-soon">Coming soon</span>`}
+                    </div>
+                </div>
+            `).join('');
+        }
+    };
+
+    const renderCamps = () => {
+        const track = document.getElementById('campsTrack');
+        if (track) {
+            track.innerHTML = campsData.map((camp, i) => `
+                <div class="camp-card">
+                    <div class="camp-card-image">
+                        <img src="${camp.image}" alt="${camp.title}" onerror="this.src='https://via.placeholder.com/300x200'">
+                    </div>
+                    <div class="camp-card-body">
+                        <h3>${camp.title}</h3>
+                        <p>${camp.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    };
+
+    renderNews();
+    renderAdmission();
+    renderCamps();
+
     class FlashCardSlider {
         constructor(options) {
             this.track = document.getElementById(options.trackId);
-            this.viewport = document.getElementById(options.viewportId);
-            this.prevBtn = document.getElementById(options.prevBtnId);
-            this.nextBtn = document.getElementById(options.nextBtnId);
-            this.dotsContainer = document.getElementById(options.dotsId);
-            this.cardsPerView = options.cardsPerView || 1;
-            this.autoplay = options.autoplay || false;
-            this.autoplayInterval = options.autoplayInterval || 5000;
-
-            if (!this.track || !this.viewport) return;
-
             this.cards = this.track.querySelectorAll(options.cardSelector);
-            this.totalCards = this.cards.length;
+            this.dotsContainer = document.getElementById('campsDots');
             this.currentIndex = 0;
-            this.autoplayTimer = null;
-            this.isTransitioning = false;
-
-            // Touch/swipe support
-            this.touchStartX = 0;
-            this.touchEndX = 0;
-            this.isDragging = false;
-
             this.init();
         }
-
         init() {
-            this.updateCardsPerView();
+            this.updateCards();
             this.createDots();
-            this.bindEvents();
-            this.updateSlider();
-
-            if (this.autoplay) {
-                this.startAutoplay();
-            }
-
-            // Observe for resize
             window.addEventListener('resize', () => {
-                this.updateCardsPerView();
+                this.updateCards();
                 this.createDots();
-                this.updateSlider();
             });
+            document.getElementById('campsNext').onclick = () => this.next();
+            document.getElementById('campsPrev').onclick = () => this.prev();
         }
-
-        updateCardsPerView() {
+        updateCards() {
             const width = window.innerWidth;
-            if (this.cardsPerView === 1) {
-                // News slider: always 1 card at a time
-                this.currentCardsPerView = 1;
-            } else {
-                // Camps slider: responsive
-                if (width <= 600) {
-                    this.currentCardsPerView = 1;
-                } else if (width <= 900) {
-                    this.currentCardsPerView = 2;
-                } else {
-                    this.currentCardsPerView = this.cardsPerView;
-                }
-            }
-
-            // Set card widths
-            const cardWidth = 100 / this.currentCardsPerView;
-            this.cards.forEach(card => {
-                card.style.minWidth = `${cardWidth}%`;
-                card.style.maxWidth = `${cardWidth}%`;
+            this.perView = width > 900 ? 3 : (width > 600 ? 2 : 1);
+            const cardWidth = 100 / this.perView;
+            this.cards.forEach(c => {
+                c.style.minWidth = cardWidth + '%';
+                c.style.maxWidth = cardWidth + '%';
             });
-
-            // Adjust currentIndex if out of bounds
-            const maxIndex = this.getMaxIndex();
-            if (this.currentIndex > maxIndex) {
-                this.currentIndex = maxIndex;
+            this.show();
+        }
+        show() {
+            const offset = -(this.currentIndex * (100 / this.perView));
+            this.track.style.transform = `translateX(${offset}%)`;
+            this.updateDots();
+        }
+        next() {
+            if (this.currentIndex < this.cards.length - this.perView) {
+                this.currentIndex++;
+                this.show();
             }
         }
-
-        getMaxIndex() {
-            return Math.max(0, this.totalCards - this.currentCardsPerView);
+        prev() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+                this.show();
+            }
         }
-
+        getMaxIndex() {
+            return this.cards.length - this.perView;
+        }
         createDots() {
             if (!this.dotsContainer) return;
             this.dotsContainer.innerHTML = '';
@@ -121,12 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (i === this.currentIndex) dot.classList.add('active');
                 dot.addEventListener('click', () => {
                     this.goTo(i);
-                    this.resetAutoplay();
                 });
                 this.dotsContainer.appendChild(dot);
             }
         }
-
         updateDots() {
             if (!this.dotsContainer) return;
             const dots = this.dotsContainer.querySelectorAll('.slider-dot');
@@ -134,249 +197,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 dot.classList.toggle('active', i === this.currentIndex);
             });
         }
-
-        updateSlider() {
-            const offset = -(this.currentIndex * (100 / this.currentCardsPerView));
-            this.track.style.transform = `translateX(${offset}%)`;
-            this.updateDots();
-            this.updateBtnStates();
-        }
-
-        updateBtnStates() {
-            if (this.prevBtn) {
-                this.prevBtn.style.opacity = this.currentIndex === 0 ? '0.4' : '1';
-                this.prevBtn.style.pointerEvents = this.currentIndex === 0 ? 'none' : 'auto';
-            }
-            if (this.nextBtn) {
-                const maxIndex = this.getMaxIndex();
-                this.nextBtn.style.opacity = this.currentIndex >= maxIndex ? '0.4' : '1';
-                this.nextBtn.style.pointerEvents = this.currentIndex >= maxIndex ? 'none' : 'auto';
-            }
-        }
-
-        next() {
-            if (this.isTransitioning) return;
-            const maxIndex = this.getMaxIndex();
-            if (this.currentIndex < maxIndex) {
-                this.currentIndex++;
-                this.isTransitioning = true;
-                this.updateSlider();
-                setTimeout(() => { this.isTransitioning = false; }, 500);
-            }
-        }
-
-        prev() {
-            if (this.isTransitioning) return;
-            if (this.currentIndex > 0) {
-                this.currentIndex--;
-                this.isTransitioning = true;
-                this.updateSlider();
-                setTimeout(() => { this.isTransitioning = false; }, 500);
-            }
-        }
-
         goTo(index) {
-            if (this.isTransitioning) return;
-            const maxIndex = this.getMaxIndex();
-            this.currentIndex = Math.max(0, Math.min(index, maxIndex));
-            this.isTransitioning = true;
-            this.updateSlider();
-            setTimeout(() => { this.isTransitioning = false; }, 500);
+            this.currentIndex = index;
+            this.show();
         }
-
-        bindEvents() {
-            if (this.prevBtn) {
-                this.prevBtn.addEventListener('click', () => {
-                    this.prev();
-                    this.resetAutoplay();
-                });
-            }
-
-            if (this.nextBtn) {
-                this.nextBtn.addEventListener('click', () => {
-                    this.next();
-                    this.resetAutoplay();
-                });
-            }
-
-            // Touch events for swipe
-            this.viewport.addEventListener('touchstart', (e) => {
-                this.touchStartX = e.changedTouches[0].screenX;
-                this.isDragging = true;
-            }, { passive: true });
-
-            this.viewport.addEventListener('touchend', (e) => {
-                if (!this.isDragging) return;
-                this.touchEndX = e.changedTouches[0].screenX;
-                this.handleSwipe();
-                this.isDragging = false;
-            }, { passive: true });
-
-            // Mouse drag support for desktop
-            this.viewport.addEventListener('mousedown', (e) => {
-                this.touchStartX = e.screenX;
-                this.isDragging = true;
-                this.viewport.style.cursor = 'grabbing';
-            });
-
-            this.viewport.addEventListener('mouseup', (e) => {
-                if (!this.isDragging) return;
-                this.touchEndX = e.screenX;
-                this.handleSwipe();
-                this.isDragging = false;
-                this.viewport.style.cursor = 'grab';
-            });
-
-            this.viewport.addEventListener('mouseleave', () => {
-                this.isDragging = false;
-                this.viewport.style.cursor = 'grab';
-            });
-
-            // Keyboard support
-            this.viewport.setAttribute('tabindex', '0');
-            this.viewport.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    this.prev();
-                    this.resetAutoplay();
-                } else if (e.key === 'ArrowRight') {
-                    this.next();
-                    this.resetAutoplay();
-                }
-            });
-        }
-
-        handleSwipe() {
-            const diff = this.touchStartX - this.touchEndX;
-            const threshold = 50;
-
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0) {
-                    this.next();
-                } else {
-                    this.prev();
-                }
-                this.resetAutoplay();
-            }
-        }
-
-        startAutoplay() {
-            this.autoplayTimer = setInterval(() => {
-                const maxIndex = this.getMaxIndex();
-                if (this.currentIndex >= maxIndex) {
-                    this.currentIndex = 0;
-                } else {
-                    this.currentIndex++;
-                }
-                this.updateSlider();
-            }, this.autoplayInterval);
-        }
-
         resetAutoplay() {
-            if (this.autoplay) {
-                clearInterval(this.autoplayTimer);
-                this.startAutoplay();
-            }
+            // If there's autoplay functionality, reset it here
         }
     }
 
-    document.querySelectorAll('.news-slider-viewport, .camps-slider-viewport').forEach(el => {
-        el.style.cursor = 'grab';
-    });
+    new FlashCardSlider({ trackId: 'campsTrack', cardSelector: '.camp-card' });
 
-    const newsListContainer = document.querySelector('.news-list');
-
-    async function fetchAndRenderNews() {
-        try {
-            const response = await fetch('http://localhost:3000/api/news');
-            const result = await response.json();
-
-            if (result.success && result.data.length > 0) {
-                renderNewsItems(result.data);
-            }
-        } catch (error) {
-            console.error("ไม่สามารถดึงข้อมูลข่าวได้:", error);
-        }
-    }
-
-    function renderNewsItems(newsData) {
-    newsListContainer.innerHTML = '';
-
-    newsData.forEach(item => {
-        console.log("ลิงก์ของข่าวนี้คือ:", item.RefUrl);
-        const link = item.RefUrl || '#'; 
-        
-        const newsHtml = `
-            <a href="${link}" target="_blank" class="news-card" style="text-decoration: none; color: inherit; display: block;">
-              <div class="news-card-inner">
-                <div class="news-card-thumb">
-                  ${item.imageUrl 
-                    ? `<img src="${item.imageUrl}" alt="news" style="width:100%; height:100%; object-fit:cover; border-radius:20px;">` 
-                    : `<div class="thumb-placeholder"></div>`}
-                </div>
-                <div class="news-card-content">
-                  <span class="news-tag tag-${item.category.toLowerCase()}">${item.category}</span>
-                  <div class="news-time">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span>${new Date(item.createdAt).toLocaleDateString('th-TH')}</span>
-                  </div>
-                  <p class="news-excerpt"><strong>${item.title}:</strong> ${item.excerpt}</p>
-                </div>
-              </div>
-            </a>
-        `;
-        newsListContainer.innerHTML += newsHtml;
-    });
-}
-    fetchAndRenderNews();
-
-    async function fetchCamps() {
-    try {
-        const response = await fetch('http://localhost:3000/api/Camp_And_Workshop'); 
-        const result = await response.json();
-        
-        if (result.success && result.data.length > 0) {
-            renderCamps(result.data);
-        }
-    } catch (error) {
-        console.error("Error fetching camps:", error);
-    }
-}
-
-    function renderCamps(camps) {
-        const campsTrack = document.getElementById('campsTrack');
-        campsTrack.innerHTML = '';
-
-        camps.forEach(camp => {
-            const link = camp.RefUrl || '#'; 
-
-            const campHtml = `
-                <a href="${link}" target="_blank" class="camp-card" style="text-decoration: none; color: inherit; display: block;">
-                  <div class="camp-card-image">
-                    ${camp.imageUrl 
-                        ? `<img src="${camp.imageUrl}" alt="${camp.title}" style="width:100%; height:200px; object-fit:cover; border-radius:20px; margin:8px; width:calc(100% - 16px);">`
-                        : `<div class="camp-placeholder"></div>`}
-                  </div>
-                  <div class="camp-card-body">
-                    <h3>${camp.title}</h3>
-                    <p>${camp.description}</p>
-                  </div>
-                </a>
-            `;
-            campsTrack.innerHTML += campHtml;
-        });
-
-        const campsSlider = new FlashCardSlider({
-            trackId: 'campsTrack',
-            viewportId: 'campsViewport',
-            prevBtnId: 'campsPrev',
-            nextBtnId: 'campsNext',
-            dotsId: 'campsDots',
-            cardSelector: '.camp-card',
-            cardsPerView: 3,
-            autoplay: true,
-            autoplayInterval: 7000
-        });
-    }
-
-    fetchCamps();
 });
