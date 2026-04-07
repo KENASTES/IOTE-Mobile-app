@@ -1,6 +1,6 @@
 document.getElementById('initTime').textContent = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
 
-const HuggingFace_API_Key = "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";
+const HuggingFace_API_Key = "";
 let Vector_Database = [];
 let Database_Loaded = false;
 let Chat_History = [];
