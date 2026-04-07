@@ -9,7 +9,7 @@ const app = express();
 const prisma = new PrismaClient();
 const PORT = 3000;
 
-const HuggingFace_API_Key = "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";
+const HuggingFace_API_Key = "";
 
 
 app.use(cors());
