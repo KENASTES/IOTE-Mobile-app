@@ -5,7 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const HuggingFace_API_Key = "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"; 
+const HuggingFace_API_Key = ""; 
 
 app.post('/api/embeddings', async (req, res) => {
     try {
